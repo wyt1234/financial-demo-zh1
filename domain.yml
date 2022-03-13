@@ -43,6 +43,9 @@ entities:
 - account_type
 - handoff_to
 - search_type
+- artist
+- location
+- song_title
 slots:
   AA_CONTINUE_FORM:
     type: any
@@ -121,143 +124,143 @@ slots:
     influence_conversation: false
 responses:
   utter_out_of_scope:
-  - text: Sorry, I'm not sure how to respond to that. Type "help" for assistance.
+  - text: 对不起，我不知道该怎么回答。输入“help”以获得帮助。
   utter_ask_transfer_money_form_amount-of-money:
-  - text: How much money do you want to transfer?
+  - text: 您要转多少钱?
   utter_ask_transfer_money_form_PERSON:
-  - text: Who do you want to transfer money to?
+  - text: 您想把钱转给谁?
   utter_goodbye:
   - text: Bye
   utter_noworries:
-  - text: You're welcome :)
+  - text: 不客气:)
   utter_transfer_complete:
-  - text: Successfully transferred {currency}{amount-of-money} to {PERSON}.
+  - text: 成功将{currency}{amount-of-money}转移到{PERSON}。
   utter_transfer_charge:
-  - text: You are entitled to six transfers within a statement cycle before being charged. For subsequent transfers you will be charged {currency}10 per transaction.
+  - text: 在收费之前，您有权在一个报表周期内进行6次转账。对于后续的转账，每笔交易将收取{currency}10。
   utter_ask_cc_payment_form_amount-of-money:
-  - text: How much do you want to pay?
+  - text: 你想付多少钱?
   utter_ask_cc_payment_form_credit_card:
-  - text: Towards which credit card account do you want to make a payment?
+  - text: 您要向哪个信用卡账户付款?
   utter_ask_cc_payment_form_time:
-  - text: For which date would you like to schedule the payment?
+  - text: 您想安排哪一天付款?
   utter_ask_transaction_search_form_vendor_name:
-  - text: For which vendor do you want to see transactions?  e.g Starbucks, Target, Amazon
+  - text: 您希望查看哪个供应商的事务?星巴克、塔吉特百货、亚马逊
   utter_ask_transaction_search_form_time:
-  - text: In which timeframe would you like to search for transactions?
+  - text: 您希望在哪个时间段搜索交易?
   utter_ask_transaction_search_form_search_type:
   - buttons:
     - payload: /inform{"search_type":"deposit"}'
-      title: Incoming (earnings)
+      title: 传入的(收益)
     - payload: /inform{"search_type":"spend"}'
-      title: Outgoing (spending)
-    text: Would you like to search incoming or outgoing transactions?
+      title: 外向(支出)
+    text: 您想要搜索传入或传出交易吗?
   utter_no_payment_amount:
-  - text: Sorry, I don't understand that payment amount.
+  - text: 对不起，我不明白付款金额。
   utter_no_paymentdate:
-  - text: Sorry, that is not a valid payment date.
+  - text: 对不起，这不是一个有效的付款日期。
   utter_no_creditcard:
-  - text: Sorry, that is not a valid credit card account to make payments towards.
+  - text: 对不起，这不是一个可以付款的有效信用卡帐户。
   utter_no_vendor_name:
-  - text: Sorry, that's not a recognized vendor.
+  - text: 对不起，这不是公认的供应商。
   utter_no_transactdate:
-  - text: Sorry, that's not a recognized time frame.
+  - text: 抱歉，这不是一个公认的时间范围。
   utter_cc_pay_scheduled:
-  - text: Payment of {currency}{amount-of-money}{payment_amount_type} towards your {credit_card} account scheduled to be paid at {time_formatted}.
+  - text: 支付{currency}{amount-of-money}{payment_amount_type}到您的{credit_card}账户的{time_formatted}。
   utter_searching_spend_transactions:
-  - text: Searching transactions{vendor_name} between {start_time_formatted} and {end_time_formatted}...
+  - text: 在{start_time_formatted}和{end_time_formatted}之间搜索事务{vendor_name}…
   utter_found_spend_transactions:
-  - text: I found {numtransacts} transactions{vendor_name} totalling {currency}{total}.
+  - text: 我发现{numtransacts} transactions{vendor_name} total {currency}{total}。
   utter_searching_deposit_transactions:
-  - text: Searching deposits made to your account between {start_time_formatted} and {end_time_formatted}...
+  - text: 搜索在{start_time_formatted}和{end_time_formatted}之间的存款
   utter_found_deposit_transactions:
-  - text: I found {numtransacts} deposits made to your account totalling {currency}{total}
+  - text: 我发现你账户上的{numtransactions}存款总额为{currency}{total}
   utter_ask_rephrase:
-  - text: I didn't quite understand that. Can you rephrase?
+  - text: 我不太明白。你能换种吗?
   utter_ok:
   - text: 👍
   utter_ask_continue:
-  - text: Would you like to continue?
+  - text: 您要继续吗?
   utter_default:
-  - text: I didn't quite understand that. Could you rephrase?
+  - text: 我不太明白。你能换种吗?
   utter_ask_cc_payment_form_AA_CONTINUE_FORM:
   - buttons:
     - payload: /affirm
-      title: Yes
+      title: 是的
     - payload: /deny
-      title: No, cancel the transaction
-    text: Would you like to continue scheduling the credit card payment?
+      title: 不，取消交易
+    text: 您要继续安排信用卡付款吗?
   utter_ask_transfer_money_form_AA_CONTINUE_FORM:
   - buttons:
     - payload: /affirm
-      title: Yes
+      title: 是的
     - payload: /deny
-      title: No, cancel the transfer
-    text: Would you like to continue scheduling the money transfer?
+      title: 不，取消转账
+    text: 您要继续安排汇款吗?
   utter_ask_transaction_search_form_AA_CONTINUE_FORM:
   - buttons:
     - payload: /affirm
-      title: Yes
+      title: 是的
     - payload: /deny
-      title: No, cancel the search
-    text: Would you like to continue the transaction search?
+      title: 不，取消搜索
+    text: 您想继续交易搜索吗?
   utter_ask_cc_payment_form_zz_confirm_form:
   - buttons:
     - payload: /affirm
-      title: Yes
+      title: 是的
     - payload: /deny
-      title: No, cancel the transaction
-    text: Would you like to schedule a payment of {currency}{amount-of-money}{payment_amount_type} towards your {credit_card} account for {time_formatted}?
+      title: 不，取消交易
+    text: 您是否要安排{currency}{amount-of-money}{payment_amount_type}向您的{time_formatting}{credit_card}账户支付{currency}{amount-of-money}{payment_amount_type} ?
   utter_ask_transfer_money_form_zz_confirm_form:
   - buttons:
     - payload: /affirm
-      title: Yes
+      title: 是的
     - payload: /deny
-      title: No, cancel the transaction
-    text: Would you like to transfer {currency}{amount-of-money} to {PERSON}?
+      title: 不，取消交易
+    text: 您要将 {currency}{amount-of-money} 转给{PERSON}?
   utter_cc_pay_cancelled:
-  - text: Credit card account payment cancelled.
+  - text: 信用卡帐户付款已取消。
   utter_transfer_cancelled:
-  - text: Transfer cancelled.
+  - text: 传输取消。
   utter_transaction_search_cancelled:
-  - text: Transaction search cancelled.
+  - text: 搜索取消交易。
   utter_account_balance:
-  - text: Your bank account balance is {currency}{init_account_balance}.
+  - text: 你的银行账户余额是 {currency}{init_account_balance}.
   utter_changed_account_balance:
-  - text: Your bank account balance was {currency}{init_account_balance} and is now {currency}{account_balance} after transfers and payments.
+  - text: 您的银行帐户余额是{currency}{init_account_balance}，现在是{currency}{account_balance}，在转帐和支付之后。
   utter_unknown_recipient:
-  - text: Sorry, {PERSON} is not in your list of known recipients.
+  - text: 对不起，{PERSON}不在您的已知收件人列表中。
   utter_insufficient_funds:
-  - text: Sorry, you don't have enough money to do that!
+  - text: 对不起，你没有足够的钱去做这件事!
   utter_insufficient_funds_specific:
-  - text: The {payment_amount_type} on your {credit_card} credit card is {amount-of-money}, so you have insufficient funds to pay it off.
+  - text: 您的{credit_card}信用卡上的{payment_amount_type}是{amount-of-money}，所以您没有足够的资金来偿还它。
   utter_credit_card_balance:
-  - text: The current balance for your {credit_card} account is {currency}{credit_card_balance}.
+  - text: 您的{credit_card}账户的当前余额是{currency}{credit_card_balance}。
   utter_nothing_due:
-  - text: Your don't owe any money on your {credit_card} credit card bill.
+  - text: 你的信用卡 {credit_card} 账单上不欠任何钱。
   utter_recipients:
-  - text: These are your known recpients to whom you can send money:{formatted_recipients}
+  - text: 这些是你可以向其汇款的已知收件人:{formatted_recipients}
   utter_greet:
-  - text: Hi! I'm your Financial Assistant!
+  - text: 这就跟你问声好！我是你的财务助理，艾融小张!
   utter_ask_handoff:
-  - text: It looks like you want to be transferred to a human agent.
+  - text: 看起来你想被转移到一个人工
   utter_handoff:
-  - text: Alright, I'll try to transfer you.
+  - text: 好的，我帮你转接。
   utter_wouldve_handed_off:
   - text: If you were talking to me via chatroom, I would have handed you off to {handoffhost}.
   utter_no_handoff:
-  - text: Since you haven't configured a host to hand off to, I can't send you anywhere!
+  - text: 因为你还没有配置一个要移交的主机，所以我不能送你去任何地方!
   utter_ask_whatelse:
-  - text: What else can I help you with?
+  - text: 还有什么需要我帮忙的吗?
   utter_bot:
-  - text: I'm a virtual assistant made with Rasa.
+  - text: 我是拉莎的虚拟助理。
   utter_help:
   - text: |-
-      I can help you with your financial accounts. 
-      You can ask me things like: 
-      - What's my account balance? 
-      - Pay off my credit card 
-      - What did I spend at Target last month? 
-      - I need to transfer money
+      我可以帮你处理财务账目。
+      你可以这样问我:
+      -我的账户余额是多少?
+      -还清我的信用卡
+      上个月我在Target花了多少钱?
+      -我需要转账
 actions:
 - action_session_start
 - action_restart
