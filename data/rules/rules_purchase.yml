@@ -1,0 +1,25 @@
+version: "2.0"
+
+rules:
+  ####
+  - rule: Activate purchase finace when no other form is active
+    condition:
+      # this condition allows stories to handle form switching
+      - active_loop: null
+    steps:
+      - intent: want_to_buy_finance
+      - action: recommand_finance_product
+      - action: purchase_finance_form
+      - active_loop: purchase_finance_form
+
+  - rule: Submit purchase_finance_form while not switched from previous form
+    condition:
+      - active_loop: purchase_finance_form
+      - slot_was_set:
+          - previous_form_name: null
+    steps:
+      - action: purchase_finance_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: buy_financial_products

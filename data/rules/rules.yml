@@ -6,7 +6,7 @@ rules:
   steps:
   - intent: check_human
   - action: utter_bot
-  
+
 - rule: Ask the user to rephrase whenever they send a message with low NLU confidence
   steps:
   - intent: nlu_fallback
@@ -16,7 +16,8 @@ rules:
   steps:
   - intent: out_of_scope
   - action: utter_out_of_scope
-    
+
+
 - rule: greet
   steps:
   - intent: greet
@@ -27,7 +28,7 @@ rules:
   steps:
   - intent: goodbye
   - action: utter_goodbye
-  
+
 - rule: help
   steps:
   - intent: help
@@ -37,22 +38,23 @@ rules:
   steps:
   - intent: thankyou
   - action: utter_noworries
-  
+
 - rule: is there a transfer charge
   steps:
   - intent: ask_transfer_charge
   - action: action_show_transfer_charge
-  
+
 - rule: Show list of known recipients
   steps:
   - intent: check_recipients
   - action: action_show_recipients
-  
+
 - rule: Show balance (bank account or credit card, based on account_type)
   steps:
   - intent: check_balance
   - action: action_show_balance
-        
+
+
 - rule: Activate cc_payment_form when no other form is active
   condition:
   # this condition allows stories to handle form switching
@@ -61,7 +63,7 @@ rules:
   - intent: pay_cc
   - action: cc_payment_form
   - active_loop: cc_payment_form
-  
+
 - rule: Activate transfer_money_form when no other form is active
   condition:
   # this condition allows stories to handle form switching
@@ -70,7 +72,7 @@ rules:
   - intent: transfer_money
   - action: transfer_money_form
   - active_loop: transfer_money_form
-  
+
 - rule: Activate transaction_search_form when no other form is active
   condition:
   # this condition allows stories to handle form switching
@@ -81,7 +83,7 @@ rules:
     - intent: check_earnings
   - action: transaction_search_form
   - active_loop: transaction_search_form
-  
+
 - rule: Submit cc_payment_form while not switched from previous form
   condition:
   - active_loop: cc_payment_form
@@ -93,7 +95,7 @@ rules:
   - slot_was_set:
     - requested_slot: null
   - action: action_pay_cc
-  
+
 - rule: Submit transfer_money_form while not switched from previous form
   condition:
   - active_loop: transfer_money_form
@@ -105,7 +107,7 @@ rules:
   - slot_was_set:
     - requested_slot: null
   - action: action_transfer_money
-  
+
 - rule: Submit transaction_search_form while not switched from previous form
   condition:
   - active_loop: transaction_search_form
@@ -117,3 +119,14 @@ rules:
   - slot_was_set:
     - requested_slot: null
   - action: action_transaction_search
+
+- rule: respond to FAQs
+  steps:
+  - intent: faq
+  - action: utter_faq
+#- rule: respond to chitchat
+#  steps:
+#  - intent: chitchat
+#  - action: utter_chitchat
+
+

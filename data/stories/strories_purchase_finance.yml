@@ -1,0 +1,24 @@
+#version: "2.0"
+#stories:
+#  - story: Story from Conversation ID 48edf17a9e9e415dac8fa8708b848c84
+#    steps:
+#      - slot_was_set:
+#          - currency: $
+#      - intent: want_to_buy_finance
+#      - action: purchase_finance_form
+#      - active_loop: purchase_finance_form
+#      - slot_was_set:
+#          - requested_slot: finance_product
+#      - intent: inform
+#      - action: purchase_finance_form
+#      - slot_was_set:
+#          - finance_product: 鑫利达
+#      - slot_was_set:
+#          - requested_slot: finance_amount
+#      - intent: inform
+#      - action: purchase_finance_form
+#      - slot_was_set:
+#          - finance_amount: '50'
+#      - slot_was_set:
+#          - requested_slot: null
+#      - active_loop: null

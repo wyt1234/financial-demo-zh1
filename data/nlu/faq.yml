@@ -1,0 +1,53 @@
+version: "2.0"
+nlu:
+- intent: faq/rasa_components
+  examples: |
+    - what are the components of rasa
+    - What components does Rasa have?
+    - What are the two components that make up [Rasa Open Source](product)?
+    - what is a component in rasa?
+    - what is componenbts
+    - what is components
+    - the components of Rasa
+    - the components of rasa
+    - want to build a chatbot
+    - whar are the components of rasa?
+    - what are Rasa's components
+    - what are the components of RASA
+    - what are the components of Rasa
+    - what are the components?
+    - tell me about the components
+    - parts of rasa
+    - more info on components
+    - more info on components of rasa pls
+    - more information on components in rasa
+    - compnnent of rasa
+    - components in rasa
+    - components of Rasa?
+    - components of rasa
+    - rasa components
+    - can give tell me about components of Rosa
+    - The components of Rasa?
+    - What are Rasa's components?
+    - What are the components of Rasa?
+    - What are the components of rasa?
+    - different parts of Rasa
+    - tell me about the different parts of rasa
+    - what are your features ?
+    - what are the features does rasa have?
+- intent: want_to_buy_finance
+  examples: |
+    - 我想买理财
+    - 我想买一款理财产品
+    - 有什么样的理财产品可以购买
+    - 推荐一款理财产品
+    - 我想买[5万块](amount-of-money)的[鑫利贷](finance_product)
+    - 我要买[五千块](amount-of-money)的[天天赢理财](finance_product)
+    - 帮我买个理财产品吧
+    - 请帮我买一份[基金](finance_product)
+    - 给我推荐几款理财产品
+    - 有没有理财产品卖
+    - 我想买一份理财
+    - 我想买10元的[鑫利](finance_product)理财
+    - 我要买理财
+    - 买理财

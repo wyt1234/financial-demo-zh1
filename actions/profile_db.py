@@ -14,23 +14,34 @@ import pytz
 utc = pytz.UTC
 
 GENERAL_ACCOUNTS = {
+    # "recipient": [
+    #     "katy parrow",
+    #     "evan oslo",
+    #     "william baker",
+    #     "karen lancaster",
+    #     "kyle gardner",
+    #     "john jacob",
+    #     "percy donald",
+    #     "lisa macintyre",
+    # ],
     "recipient": [
-        "katy parrow",
-        "evan oslo",
-        "william baker",
-        "karen lancaster",
-        "kyle gardner",
-        "john jacob",
-        "percy donald",
-        "lisa macintyre",
+        "小吴",
+        "小郑",
+        "小李",
+        "爸爸",
+        "小张",
+        "小王",
+        "小钱",
+        "小孙",
     ],
-    "vendor": ["target", "starbucks", "amazon"],
-    "depositor": ["interest", "employer"],
+    # "vendor": ["target", "starbucks", "amazon"],
+    "vendor": ["百货超市", "星巴克", "亚马逊"],
+    # "depositor": ["interest", "employer"],
+    "depositor": ["利息", "工作单位"]
 }
 
 ACCOUNT_NUMBER_LENGTH = 12
 CREDIT_CARD_NUMBER_LENGTH = 14
-
 
 Base = declarative_base()
 
@@ -137,14 +148,14 @@ class ProfileDB:
         if len(account_number) == CREDIT_CARD_NUMBER_LENGTH:
             return (
                 self.session.query(CreditCard)
-                .filter(CreditCard.id == int(account_number))
-                .first()
+                    .filter(CreditCard.id == int(account_number))
+                    .first()
             )
         else:
             return (
                 self.session.query(Account)
-                .filter(Account.id == int(account_number))
-                .first()
+                    .filter(Account.id == int(account_number))
+                    .first()
             )
 
     def get_recipient_from_name(self, session_id: Text, recipient_name: Text):
@@ -154,9 +165,9 @@ class ProfileDB:
         account = self.get_account_from_session_id(session_id)
         recipient = (
             self.session.query(RecipientRelationship)
-            .filter(RecipientRelationship.account_id == account.id)
-            .filter(RecipientRelationship.recipient_nickname == recipient_name.lower())
-            .first()
+                .filter(RecipientRelationship.account_id == account.id)
+                .filter(RecipientRelationship.recipient_nickname == recipient_name.lower())
+                .first()
         )
         recipient_account = self.get_account(recipient.recipient_account_id)
         return recipient_account
@@ -165,11 +176,11 @@ class ProfileDB:
         """List recipient nicknames available to an account holder"""
         recipients = (
             self.session.query(RecipientRelationship.recipient_nickname)
-            .filter(
+                .filter(
                 RecipientRelationship.account_id
                 == self.get_account_from_session_id(session_id).id
             )
-            .all()
+                .all()
         )
         return [recipient.recipient_nickname for recipient in recipients]
 
@@ -177,8 +188,8 @@ class ProfileDB:
         """Check if an account for `session_id` already exists"""
         return self.session.query(
             self.session.query(Account.session_id)
-            .filter(Account.session_id == session_id)
-            .exists()
+                .filter(Account.session_id == session_id)
+                .exists()
         ).scalar()
 
     def get_account_balance(self, session_id: Text):
@@ -188,13 +199,13 @@ class ProfileDB:
         )
         spent = float(
             self.session.query(sa.func.sum(Transaction.amount))
-            .filter(Transaction.from_account_number == account_number)
-            .all()[0][0]
+                .filter(Transaction.from_account_number == account_number)
+                .all()[0][0]
         )
         earned = float(
             self.session.query(sa.func.sum(Transaction.amount))
-            .filter(Transaction.to_account_number == account_number)
-            .all()[0][0]
+                .filter(Transaction.to_account_number == account_number)
+                .all()[0][0]
         )
         return earned - spent
 
@@ -202,17 +213,17 @@ class ProfileDB:
         """Get the currency for an account"""
         return (
             self.session.query(Account.currency)
-            .filter(Account.session_id == session_id)
-            .first()[0]
+                .filter(Account.session_id == session_id)
+                .first()[0]
         )
 
     def search_transactions(
-        self,
-        session_id: Text,
-        start_time: Optional[datetime] = None,
-        end_time: Optional[datetime] = None,
-        deposit: bool = False,
-        vendor: Optional[Text] = None,
+            self,
+            session_id: Text,
+            start_time: Optional[datetime] = None,
+            end_time: Optional[datetime] = None,
+            deposit: bool = False,
+            vendor: Optional[Text] = None,
     ):
         """Find all transactions for an account between `start_time` and `end_time`.
         Looks for spend transactions by default, set `deposit` to `True` to search earnings.
@@ -227,15 +238,15 @@ class ProfileDB:
         elif vendor:
             to_account = (
                 self.session.query(Account.id)
-                .filter(Account.session_id.startswith("vendor_"))
-                .filter(Account.account_holder_name == vendor.lower())
-                .first()
+                    .filter(Account.session_id.startswith("vendor_"))
+                    .filter(Account.account_holder_name == vendor.lower())
+                    .first()
             )
             to_account_number = self.get_account_number(to_account)
             transactions = (
                 self.session.query(Transaction)
-                .filter(Transaction.from_account_number == account_number)
-                .filter(Transaction.to_account_number == to_account_number)
+                    .filter(Transaction.from_account_number == account_number)
+                    .filter(Transaction.to_account_number == to_account_number)
             )
         else:
             transactions = self.session.query(Transaction).filter(
@@ -253,8 +264,8 @@ class ProfileDB:
         account = self.get_account_from_session_id(session_id)
         cards = (
             self.session.query(CreditCard)
-            .filter(CreditCard.account_id == account.id)
-            .all()
+                .filter(CreditCard.account_id == account.id)
+                .all()
         )
         return [card.credit_card_name for card in cards]
 
@@ -263,20 +274,22 @@ class ProfileDB:
         account = self.get_account_from_session_id(session_id)
         return (
             self.session.query(CreditCard)
-            .filter(CreditCard.account_id == account.id)
-            .filter(CreditCard.credit_card_name == credit_card_name.lower())
-            .first()
+                .filter(CreditCard.account_id == account.id)
+                .filter(CreditCard.credit_card_name == credit_card_name.lower())
+                .first()
         )
 
     def get_credit_card_balance(
-        self,
-        session_id: Text,
-        credit_card_name: Text,
-        balance_type: Text = "current_balance",
+            self,
+            session_id: Text,
+            credit_card_name: Text,
+            balance_type: Text = "current_balance",
     ):
         """Get the balance for a credit card based on its name and the balance type"""
         balance_type = "_".join(balance_type.split())
         card = self.get_credit_card(session_id, credit_card_name)
+        # fixme
+        balance_type = 'minimum_balance' if '最低' in balance_type else 'current_balance'
         return getattr(card, balance_type)
 
     @staticmethod
@@ -292,22 +305,22 @@ class ProfileDB:
         """List valid vendors"""
         vendors = (
             self.session.query(Account.account_holder_name)
-            .filter(Account.session_id.startswith("vendor_"))
-            .all()
+                .filter(Account.session_id.startswith("vendor_"))
+                .all()
         )
         return [vendor.account_holder_name for vendor in vendors]
 
     def pay_off_credit_card(
-        self, session_id: Text, credit_card_name: Text, amount: float
+            self, session_id: Text, credit_card_name: Text, amount: float
     ):
         """Do a transaction to move the specified amount from an account to a credit card"""
         account = self.get_account_from_session_id(session_id)
         account_number = self.get_account_number(account)
         credit_card = (
             self.session.query(CreditCard)
-            .filter(CreditCard.account_id == account.id)
-            .filter(CreditCard.credit_card_name == credit_card_name.lower())
-            .first()
+                .filter(CreditCard.account_id == account.id)
+                .filter(CreditCard.credit_card_name == credit_card_name.lower())
+                .first()
         )
         self.transact(
             account_number,
@@ -329,7 +342,8 @@ class ProfileDB:
 
     def add_credit_cards(self, session_id: Text):
         """Populate the creditcard table for a given session_id"""
-        credit_card_names = ["iron bank", "credit all", "emblem", "justice bank"]
+        # credit_card_names = ["iron bank", "credit all", "emblem", "justice bank"]
+        credit_card_names = ["工商银行", "上海农商银行"]
         credit_cards = [
             CreditCard(
                 credit_card_name=cardname,
@@ -344,7 +358,7 @@ class ProfileDB:
         self.session.add_all(credit_cards)
 
     def check_general_accounts_populated(
-        self, general_account_names: Dict[Text, List[Text]]
+            self, general_account_names: Dict[Text, List[Text]]
     ):
         """Check whether tables have been populated with global values for vendors, recipients, and depositors"""
         account_names = set(
@@ -379,8 +393,8 @@ class ProfileDB:
         account = self.get_account_from_session_id(session_id)
         recipients = (
             self.session.query(Account.account_holder_name, Account.id)
-            .filter(Account.session_id.startswith("recipient_"))
-            .all()
+                .filter(Account.session_id.startswith("recipient_"))
+                .all()
         )
         session_recipients = sample(recipients, choice(list(range(3, len(recipients)))))
         relationships = [
@@ -400,13 +414,13 @@ class ProfileDB:
         )
         vendors = (
             self.session.query(Account)
-            .filter(Account.session_id.startswith("vendor_"))
-            .all()
+                .filter(Account.session_id.startswith("vendor_"))
+                .all()
         )
         depositors = (
             self.session.query(Account)
-            .filter(Account.session_id.startswith("depositor_"))
-            .all()
+                .filter(Account.session_id.startswith("depositor_"))
+                .all()
         )
 
         start_date = utc.localize(datetime(2019, 1, 1))
@@ -482,7 +496,7 @@ class ProfileDB:
         self.session.commit()
 
     def transact(
-        self, from_account_number: Text, to_account_number: Text, amount: float
+            self, from_account_number: Text, to_account_number: Text, amount: float
     ):
         """Add a transation to the transaction table"""
         timestamp = datetime.now()

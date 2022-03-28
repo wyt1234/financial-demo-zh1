@@ -10,8 +10,22 @@ pipeline:
   epochs: 200
 - name: EntitySynonymMapper
 - name: RegexEntityExtractor
+#- name: ResponseSelector
+#  epochs: 100
+#
 - name: ResponseSelector
+  retrieval_intent: out_of_scope
+  scale_loss: false
   epochs: 100
+- name: ResponseSelector
+  retrieval_intent: faq
+  scale_loss: false
+  epochs: 100
+- name: ResponseSelector
+  retrieval_intent: chitchat
+  scale_loss: false
+  epochs: 100
+#
 - name: FallbackClassifier
   threshold: 0.5
   ambiguity_threshold: 0.2

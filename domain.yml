@@ -19,8 +19,8 @@ intents:
     use_entities: []
 - check_balance:
     use_entities:
-    - account_type
     - credit_card
+    - account_type
 - check_earnings:
     use_entities: []
 - check_recipients
@@ -32,6 +32,9 @@ intents:
 - human_handoff
 - help
 - nlu_fallback
+- thank
+- faq
+- want_to_buy_finance
 entities:
 - amount-of-money
 - credit_card
@@ -46,6 +49,8 @@ entities:
 - artist
 - location
 - song_title
+- product
+- finance_product
 slots:
   AA_CONTINUE_FORM:
     type: any
@@ -122,6 +127,12 @@ slots:
   zz_confirm_form:
     type: any
     influence_conversation: false
+  finance_product:
+    type: any
+    influence_conversation: false
+  finance_amount:
+    type: any
+    influence_conversation: false
 responses:
   utter_out_of_scope:
   - text: 对不起，我不知道该怎么回答。输入“help”以获得帮助。
@@ -134,11 +145,11 @@ responses:
   utter_noworries:
   - text: 不客气:)
   utter_transfer_complete:
-  - text: 成功将{currency}{amount-of-money}转移到{PERSON}。
+  - text: 成功将{currency}{amount-of-money}转给{PERSON}。
   utter_transfer_charge:
   - text: 在收费之前，您有权在一个报表周期内进行6次转账。对于后续的转账，每笔交易将收取{currency}10。
   utter_ask_cc_payment_form_amount-of-money:
-  - text: 你想付多少钱?
+  - text: 您想最低还款还是全部还清?
   utter_ask_cc_payment_form_credit_card:
   - text: 您要向哪个信用卡账户付款?
   utter_ask_cc_payment_form_time:
@@ -146,16 +157,16 @@ responses:
   utter_ask_transaction_search_form_vendor_name:
   - text: 您希望查看哪个供应商的事务?星巴克、塔吉特百货、亚马逊
   utter_ask_transaction_search_form_time:
-  - text: 您希望在哪个时间段搜索交易?
+  - text: 请问您想查询几号的账单?
   utter_ask_transaction_search_form_search_type:
   - buttons:
     - payload: /inform{"search_type":"deposit"}'
-      title: 传入的(收益)
+      title: 转入交易(收益)
     - payload: /inform{"search_type":"spend"}'
-      title: 外向(支出)
-    text: 您想要搜索传入或传出交易吗?
+      title: 转出交易(支出)
+    text: 您要搜索转入交易或转出交易吗?
   utter_no_payment_amount:
-  - text: 对不起，我不明白付款金额。
+  - text: 对不起，这不是一个正确的付款金额。
   utter_no_paymentdate:
   - text: 对不起，这不是一个有效的付款日期。
   utter_no_creditcard:
@@ -175,13 +186,13 @@ responses:
   utter_found_deposit_transactions:
   - text: 我发现你账户上的{numtransactions}存款总额为{currency}{total}
   utter_ask_rephrase:
-  - text: 我不太明白。你能换种吗?
+  - text: 抱歉我不太明白。你能换种说法吗?
   utter_ok:
   - text: 👍
   utter_ask_continue:
   - text: 您要继续吗?
   utter_default:
-  - text: 我不太明白。你能换种吗?
+  - text: 抱歉我不太明白。你能换种说法吗?
   utter_ask_cc_payment_form_AA_CONTINUE_FORM:
   - buttons:
     - payload: /affirm
@@ -252,15 +263,21 @@ responses:
   utter_ask_whatelse:
   - text: 还有什么需要我帮忙的吗?
   utter_bot:
-  - text: 我是拉莎的虚拟助理。
+  - text: 我是你的财务机器人小张
   utter_help:
   - text: |-
       我可以帮你处理财务账目。
       你可以这样问我:
       -我的账户余额是多少?
       -还清我的信用卡
-      上个月我在Target花了多少钱?
-      -我需要转账
+      -我想转账
+      -我想购买理财产品
+  utter_ask_purchase_finance_form_finance_product:
+  - text: 请问您想要购买哪款理财产品？
+  utter_ask_purchase_finance_form_finance_amount:
+  - text: 请问您想要购买多少金额？
+  utter_wrong_finance_product:
+  - text: 抱歉，您选择的理财产品有误哦
 actions:
 - action_session_start
 - action_restart
@@ -280,6 +297,9 @@ actions:
 - validate_cc_payment_form
 - validate_transfer_money_form
 - validate_transaction_search_form
+- validate_purchase_finance_form
+- buy_financial_products
+- recommand_finance_product
 forms:
   cc_payment_form:
     required_slots:
@@ -419,4 +439,20 @@ forms:
       - intent:
         - inform
         - transaction_search_form
+        type: from_text
+  purchase_finance_form:
+    required_slots:
+      finance_product:
+      - entity: finance_product
+        type: from_entity
+      - intent:
+        - want_to_buy_finance
+        - inform
+        type: from_text
+      finance_amount:
+      - entity: amount-of-money
+        type: from_entity
+      - intent:
+        - want_to_buy_finance
+        - inform
         type: from_text

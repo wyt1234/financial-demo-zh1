@@ -29,7 +29,6 @@ from actions.profile_db import create_database, ProfileDB
 
 from actions.custom_forms import CustomFormValidationAction
 
-
 logger = logging.getLogger(__name__)
 
 # The profile database is created/connected to when the action server starts
@@ -50,9 +49,9 @@ NEXT_FORM_NAME = {
 }
 
 FORM_DESCRIPTION = {
-    "cc_payment_form": "credit card payment",
-    "transfer_money_form": "money transfer",
-    "transaction_search_form": "transaction search",
+    "cc_payment_form": "信用卡付款",
+    "transfer_money_form": "转账",
+    "transaction_search_form": "交易查询",
 }
 
 
@@ -64,10 +63,10 @@ class ActionPayCC(Action):
         return "action_pay_cc"
 
     async def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> List[Dict]:
         """Executes the action"""
 
@@ -112,7 +111,7 @@ class ValidatePayCCForm(CustomFormValidationAction):
         return "validate_cc_payment_form"
 
     def amount_from_balance(
-        self, dispatcher, tracker, credit_card_name, balance_type
+            self, dispatcher, tracker, credit_card_name, balance_type
     ) -> Dict[Text, Any]:
         amount_balance = profile_db.get_credit_card_balance(
             tracker.sender_id, credit_card_name, balance_type
@@ -127,11 +126,11 @@ class ValidatePayCCForm(CustomFormValidationAction):
         }
 
     async def validate_amount_of_money(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validates value of 'amount-of-money' slot"""
         if not value:
@@ -147,12 +146,13 @@ class ValidatePayCCForm(CustomFormValidationAction):
                 )
             else:
                 credit_card = None
-            balance_types = profile_db.list_balance_types()
+            # balance_types = profile_db.list_balance_types()
+            balance_types = ['最低', '最低还款', '全部', '全部还清']
             if value and value.lower() in balance_types:
                 balance_type = value.lower()
                 if not credit_card:
                     dispatcher.utter_message(
-                        f"I see you'd like to pay the {balance_type}."
+                        f"你想付 {balance_type}."
                     )
                     return {"amount-of-money": balance_type}
                 slots_to_set = self.amount_from_balance(
@@ -187,17 +187,18 @@ class ValidatePayCCForm(CustomFormValidationAction):
         return {"amount-of-money": None}
 
     async def validate_credit_card(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validates value of 'credit_card' slot"""
         if value and value.lower() in profile_db.list_credit_cards(tracker.sender_id):
             amount = tracker.get_slot("amount-of-money")
             credit_card_slot = {"credit_card": value.title()}
-            balance_types = profile_db.list_balance_types()
+            # balance_types = profile_db.list_balance_types()
+            balance_types = ['最低还款', '全部还清']
             if amount and amount.lower() in balance_types:
                 updated_amount = self.amount_from_balance(
                     dispatcher, tracker, value.lower(), amount
@@ -224,11 +225,11 @@ class ValidatePayCCForm(CustomFormValidationAction):
         return {"credit_card": None}
 
     async def explain_credit_card(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Explains 'credit_card' slot"""
         dispatcher.utter_message("You have the following credits cards:")
@@ -246,26 +247,27 @@ class ValidatePayCCForm(CustomFormValidationAction):
         return {}
 
     async def validate_time(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validates value of 'time' slot"""
         timeentity = get_entity_details(tracker, "time")
         parsedtime = timeentity and parse_duckling_time(timeentity)
         if not parsedtime:
             dispatcher.utter_message(response="utter_no_transactdate")
-            return {"time": None}
+            # return {"time": None}
+            return {"time": '2022-03-27'}
         return parsedtime
 
     async def validate_zz_confirm_form(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validates value of 'zz_confirm_form' slot"""
         if value in ["yes", "no"]:
@@ -282,10 +284,10 @@ class ActionTransactionSearch(Action):
         return "action_transaction_search"
 
     async def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> List[Dict]:
         """Executes the action"""
         slots = {
@@ -353,7 +355,7 @@ class ValidateTransactionSearchForm(CustomFormValidationAction):
         return "validate_transaction_search_form"
 
     async def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """Custom validates the filled slots"""
         events = await super().run(dispatcher, tracker, domain)
@@ -368,11 +370,11 @@ class ValidateTransactionSearchForm(CustomFormValidationAction):
         return events
 
     async def validate_search_type(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validates value of 'search_type' slot"""
         if value in ["spend", "deposit"]:
@@ -381,11 +383,11 @@ class ValidateTransactionSearchForm(CustomFormValidationAction):
         return {"search_type": None}
 
     async def validate_vendor_name(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validates value of 'vendor_name' slot"""
         if value and value.lower() in profile_db.list_vendors():
@@ -395,20 +397,20 @@ class ValidateTransactionSearchForm(CustomFormValidationAction):
         return {"vendor_name": None}
 
     async def validate_time(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validates value of 'time' slot"""
-        timeentity = get_entity_details(tracker, "time")
-        parsedinterval = timeentity and parse_duckling_time_as_interval(timeentity)
-        if not parsedinterval:
-            dispatcher.utter_message(response="utter_no_transactdate")
-            return {"time": None}
-
-        return parsedinterval
+        # timeentity = get_entity_details(tracker, "time")
+        # parsedinterval = timeentity and parse_duckling_time_as_interval(timeentity)
+        # if not parsedinterval:
+        #     dispatcher.utter_message(response="utter_no_transactdate")
+        #     return {"time": None}
+        # return parsedinterval
+        return {"time": '2021-03-03'}
 
 
 class ActionTransferMoney(Action):
@@ -419,7 +421,7 @@ class ActionTransferMoney(Action):
         return "action_transfer_money"
 
     async def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """Executes the action"""
         slots = {
@@ -464,11 +466,11 @@ class ValidateTransferMoneyForm(CustomFormValidationAction):
         return "validate_transfer_money_form"
 
     async def validate_PERSON(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validates value of 'PERSON' slot"""
         # It is possible that both Spacy & DIET extracted the PERSON
@@ -491,11 +493,11 @@ class ValidateTransferMoneyForm(CustomFormValidationAction):
         return {"PERSON": None}
 
     async def explain_PERSON(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Explains 'PERSON' slot"""
         recipients = profile_db.list_known_recipients(tracker.sender_id)
@@ -509,35 +511,37 @@ class ValidateTransferMoneyForm(CustomFormValidationAction):
         return {}
 
     async def validate_amount_of_money(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validates value of 'amount-of-money' slot"""
         account_balance = profile_db.get_account_balance(tracker.sender_id)
         try:
-            entity = get_entity_details(
-                tracker, "amount-of-money"
-            ) or get_entity_details(tracker, "number")
-            amount_currency = parse_duckling_currency(entity)
-            if not amount_currency:
-                raise TypeError
-            if account_balance < float(amount_currency.get("amount-of-money")):
-                dispatcher.utter_message(response="utter_insufficient_funds")
-                return {"amount-of-money": None}
+            # entity = get_entity_details(
+            #     tracker, "amount-of-money"
+            # ) or get_entity_details(tracker, "number")
+            # amount_currency = parse_duckling_currency(entity)
+            # if not amount_currency:
+            #     raise TypeError
+            # if account_balance < float(amount_currency.get("amount-of-money")):
+            #     dispatcher.utter_message(response="utter_insufficient_funds")
+            #     return {"amount-of-money": None}
+            # fixme 搞那些花里胡哨的？
+            amount_currency = float(value)
             return amount_currency
         except (TypeError, AttributeError):
             dispatcher.utter_message(response="utter_no_payment_amount")
             return {"amount-of-money": None}
 
     async def validate_zz_confirm_form(
-        self,
-        value: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            value: Text,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validates value of 'zz_confirm_form' slot"""
         if value in ["yes", "no"]:
@@ -554,7 +558,7 @@ class ActionShowBalance(Action):
         return "action_show_balance"
 
     async def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """Executes the custom action"""
         account_type = tracker.get_slot("account_type")
@@ -626,7 +630,7 @@ class ActionShowRecipients(Action):
         return "action_show_recipients"
 
     async def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """Executes the custom action"""
         recipients = profile_db.list_known_recipients(tracker.sender_id)
@@ -659,7 +663,7 @@ class ActionShowTransferCharge(Action):
         return "action_show_transfer_charge"
 
     async def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """Executes the custom action"""
         dispatcher.utter_message(response="utter_transfer_charge")
@@ -686,7 +690,7 @@ class ActionSessionStart(Action):
 
     @staticmethod
     def _slot_set_events_from_tracker(
-        tracker: "Tracker",
+            tracker: "Tracker",
     ) -> List["SlotSet"]:
         """Fetches SlotSet events from tracker and carries over keys and values"""
 
@@ -703,10 +707,10 @@ class ActionSessionStart(Action):
         ]
 
     async def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> List[EventType]:
         """Executes the custom action"""
         # the session should begin with a `session_started` event
@@ -735,10 +739,10 @@ class ActionRestart(Action):
         return "action_restart"
 
     async def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
     ) -> List[EventType]:
         """Executes the custom action"""
         return [Restarted(), FollowupAction("action_session_start")]
@@ -755,7 +759,7 @@ class ActionAskTransactionSearchFormConfirm(Action):
         return "action_ask_transaction_search_form_zz_confirm_form"
 
     async def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """Executes the custom action"""
         search_type = tracker.get_slot("search_type")
@@ -764,18 +768,24 @@ class ActionAskTransactionSearchFormConfirm(Action):
         end_time_formatted = tracker.get_slot("end_time_formatted")
 
         if vendor_name:
-            vendor_name = f" with {vendor_name}"
+            # vendor_name = f" with {vendor_name}"
+            # vendor_name = f" with {vendor_name}"
+            vendor_name = f" {vendor_name}"
         else:
             vendor_name = ""
         if search_type == "spend":
+            # text = (
+            #     f"您想要查找从 "
+            #     f"{start_time_formatted} 至 {end_time_formatted}之间的{vendor_name} 吗?"
+            # )
             text = (
-                f"Do you want to search for transactions{vendor_name} between "
-                f"{start_time_formatted} and {end_time_formatted}?"
+                f"您想要查找从 "
+                f"2022-03-27 至 2022-03-28 之间的 {vendor_name} 吗?"
             )
         elif search_type == "deposit":
             text = (
-                f"Do you want to search deposits made to your account between "
-                f"{start_time_formatted} and {end_time_formatted}?"
+                f"您想查询您的账户从"
+                f"{start_time_formatted} 到 {end_time_formatted}之间的存款吗?"
             )
         buttons = [
             {"payload": "/affirm", "title": "Yes"},
@@ -794,7 +804,7 @@ class ActionSwitchFormsAsk(Action):
         return "action_switch_forms_ask"
 
     async def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """Executes the custom action"""
         active_form_name = tracker.active_form.get("name")
@@ -802,8 +812,8 @@ class ActionSwitchFormsAsk(Action):
         next_form_name = NEXT_FORM_NAME.get(intent_name)
 
         if (
-            active_form_name not in FORM_DESCRIPTION.keys()
-            or next_form_name not in FORM_DESCRIPTION.keys()
+                active_form_name not in FORM_DESCRIPTION.keys()
+                or next_form_name not in FORM_DESCRIPTION.keys()
         ):
             logger.debug(
                 f"Cannot create text for `active_form_name={active_form_name}` & "
@@ -812,8 +822,8 @@ class ActionSwitchFormsAsk(Action):
             next_form_name = None
         else:
             text = (
-                f"We haven't completed the {FORM_DESCRIPTION[active_form_name]} yet. "
-                f"Are you sure you want to switch to {FORM_DESCRIPTION[next_form_name]}?"
+                f"亲亲您还未完成 {FORM_DESCRIPTION[active_form_name]}  "
+                f"是否要切换到 {FORM_DESCRIPTION[next_form_name]}?"
             )
             buttons = [
                 {"payload": "/affirm", "title": "Yes"},
@@ -830,7 +840,7 @@ class ActionSwitchFormsDeny(Action):
         return "action_switch_forms_deny"
 
     async def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """Executes the custom action"""
         active_form_name = tracker.active_form.get("name")
@@ -840,7 +850,7 @@ class ActionSwitchFormsDeny(Action):
                 f"Cannot create text for `active_form_name={active_form_name}`."
             )
         else:
-            text = f"Ok, let's continue with the {FORM_DESCRIPTION[active_form_name]}."
+            text = f"好的，让我们继续 {FORM_DESCRIPTION[active_form_name]}."
             dispatcher.utter_message(text=text)
 
         return [SlotSet("next_form_name", None)]
@@ -853,15 +863,15 @@ class ActionSwitchFormsAffirm(Action):
         return "action_switch_forms_affirm"
 
     async def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """Executes the custom action"""
         active_form_name = tracker.active_form.get("name")
         next_form_name = tracker.get_slot("next_form_name")
 
         if (
-            active_form_name not in FORM_DESCRIPTION.keys()
-            or next_form_name not in FORM_DESCRIPTION.keys()
+                active_form_name not in FORM_DESCRIPTION.keys()
+                or next_form_name not in FORM_DESCRIPTION.keys()
         ):
             logger.debug(
                 f"Cannot create text for `active_form_name={active_form_name}` & "
@@ -869,9 +879,9 @@ class ActionSwitchFormsAffirm(Action):
             )
         else:
             text = (
-                f"Great. Let's switch from the {FORM_DESCRIPTION[active_form_name]} "
-                f"to {FORM_DESCRIPTION[next_form_name]}. "
-                f"Once completed, you will have the option to switch back."
+                f"好的，让我们从 {FORM_DESCRIPTION[active_form_name]} "
+                f"回到 {FORM_DESCRIPTION[next_form_name]}. "
+                f"完成之后，您可以再回来"
             )
             dispatcher.utter_message(text=text)
 
@@ -888,7 +898,7 @@ class ActionSwitchBackAsk(Action):
         return "action_switch_back_ask"
 
     async def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """Executes the custom action"""
         previous_form_name = tracker.get_slot("previous_form_name")
@@ -900,8 +910,8 @@ class ActionSwitchBackAsk(Action):
             previous_form_name = None
         else:
             text = (
-                f"Would you like to go back to the "
-                f"{FORM_DESCRIPTION[previous_form_name]} now?."
+                f"您是否想继续"
+                f"{FORM_DESCRIPTION[previous_form_name]} 吗?."
             )
             buttons = [
                 {"payload": "/affirm", "title": "Yes"},

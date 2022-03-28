@@ -21,6 +21,7 @@ stories:
   - action: cc_payment_form
   - active_loop: cc_payment_form
     
+
 - story: pay credit card + switch to search transactions, affirm + switch back, deny
   steps:
   - intent: pay_cc
