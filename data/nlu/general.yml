@@ -93,12 +93,12 @@ nlu:
     - 好的
 - intent: inform
   examples: |
-    - 10美元
+    - [10块钱](amount-of-money)
     - 5000
     - 500
-    - 100美元
-    - 500美元
-    - 1000美元
+    - [100元](amount-of-money)
+    - [500元](amount-of-money)
+    - [1000美元](amount-of-money)
     - 明天
     - 下周
     - 昨天
@@ -128,7 +128,7 @@ nlu:
     - 为明天
     - 在周六
     - 请安排在下个月的第一天
-    - 一百元
+    - [一百元](amount-of-money)
     - [万事达](credit_card)
     - [签证](credit_card)
     - [美国运通](credit_card)
@@ -201,3 +201,11 @@ nlu:
     - [日鑫系列天天盈B款](product)
     - [国家开发银行2022年第二期金融债券](product)
     - [利安永吉终身寿险](product)
+    - [1000块](amount-of-money)
+    - [十万块](amount-of-money)
+    - [五万零五百](amount-of-money)
+    - [一万零一千](amount-of-money)
+    - [九百五十三块](amount-of-money)
+    - [一千七百块](amount-of-money)
+    - [1700块](amount-of-money)
+    - [5000元](amount-of-money)

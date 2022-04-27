@@ -34,7 +34,18 @@ import numpy as np
 import spacy
 from loguru import logger
 
-# spacy语义相似度
+#########数字抽取#########
+import cn2an
+import chinese2digits as c2d
+
+def to_digit(s: str):
+    output = cn2an.transform("s", "cn2an")
+    output = c2d.takeNumberFromString(output)
+    output = output['digitsStringList']
+    return output
+
+
+########### spacy语义相似度###########
 time1 = datetime.datetime.now()
 nlp = spacy.load('zh_core_web_md')
 time2 = datetime.datetime.now()
@@ -62,7 +73,7 @@ class ActionBuyFinancialProducts(Action):
 
     def name(self) -> Text:
         """Unique identifier of the action"""
-        return "buy_financial_products "
+        return "buy_financial_products"
 
     async def run(
             self,

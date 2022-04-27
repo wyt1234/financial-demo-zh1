@@ -19,8 +19,8 @@ intents:
     use_entities: []
 - check_balance:
     use_entities:
-    - credit_card
     - account_type
+    - credit_card
 - check_earnings:
     use_entities: []
 - check_recipients
@@ -39,6 +39,7 @@ intents:
 - want_to_detail
 - want_to_other_recommand
 - want_to_purchase
+- appoint_which_one
 entities:
 - amount-of-money
 - credit_card
@@ -56,6 +57,7 @@ entities:
 - product
 - finance_product
 - finance_type
+- finance_amount
 slots:
   AA_CONTINUE_FORM:
     type: any
