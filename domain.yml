@@ -35,6 +35,10 @@ intents:
 - thank
 - faq
 - want_to_buy_finance
+- finance_detail
+- want_to_detail
+- want_to_other_recommand
+- want_to_purchase
 entities:
 - amount-of-money
 - credit_card
@@ -51,6 +55,7 @@ entities:
 - song_title
 - product
 - finance_product
+- finance_type
 slots:
   AA_CONTINUE_FORM:
     type: any

@@ -35,19 +35,28 @@ nlu:
     - tell me about the different parts of rasa
     - what are your features ?
     - what are the features does rasa have?
-- intent: want_to_buy_finance
+- intent: finance_detail
   examples: |
-    - 我想买理财
-    - 我想买一款理财产品
-    - 有什么样的理财产品可以购买
-    - 推荐一款理财产品
-    - 我想买[5万块](amount-of-money)的[鑫利贷](finance_product)
-    - 我要买[五千块](amount-of-money)的[天天赢理财](finance_product)
-    - 帮我买个理财产品吧
-    - 请帮我买一份[基金](finance_product)
-    - 给我推荐几款理财产品
-    - 有没有理财产品卖
-    - 我想买一份理财
-    - 我想买10元的[鑫利](finance_product)理财
-    - 我要买理财
-    - 买理财
+    - 能不能介绍一下这款理财产品
+    - 能仔细说说吗
+    - 这款产品的收益率是多少
+    - 这款产品的起购金额是多少
+- intent: want_to_detail
+  examples: |
+    - 能给我详细介绍下吗
+    - 介绍一下这款产品
+    - 详细情况说一下
+    - 有这款产品的其他介绍吗
+    - 了解一下这款产品
+    - 讲一讲这款产品
+    - 我想了解这款产品的具体情况
+    - 具体说说
+- intent: want_to_purchase
+  examples: |
+    - 好的我想下单
+    - 就买它了
+    - 行帮我下单吧
+    - 帮我买[1万](amount-of-money)块钱
+    - 这款产品请帮我买[2万](amount-of-money)块钱
+    - 好的下单吧
+    - 可以的直接买吧

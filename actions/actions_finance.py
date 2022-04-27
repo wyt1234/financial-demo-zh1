@@ -28,6 +28,33 @@ from actions.profile_db import create_database, ProfileDB
 
 from actions.custom_forms import CustomFormValidationAction
 
+import datetime
+
+import numpy as np
+import spacy
+from loguru import logger
+
+# spacy语义相似度
+time1 = datetime.datetime.now()
+nlp = spacy.load('zh_core_web_md')
+time2 = datetime.datetime.now()
+logger.info(f'spacy model加载完成，耗时{time2 - time1}秒')
+
+
+def sentences_similarity(sentences, corpus, topk=3, min_simil=0):
+    similarities = []
+    for n, s in enumerate(sentences):
+        for q in corpus:
+            token_s = nlp(s)
+            token_q = nlp(q)
+            simil = token_s.similarity(token_q)
+            # logger.info('simil {}'.format(float(simil)))
+            similarities.append({'q': q, 'simil': float(simil)})
+    similarities = filter(lambda x: x['simil'] >= min_simil, similarities)
+    similarities = sorted(similarities, key=lambda x: x['simil'], reverse=True)
+    logger.info(similarities[:topk])
+    return similarities[:topk]
+
 
 #####购买理财产品##########
 class ActionBuyFinancialProducts(Action):
