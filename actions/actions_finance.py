@@ -69,45 +69,6 @@ def sentences_similarity(sentences, corpus, topk=3, min_simil=0):
 
 
 #####购买理财产品##########
-# 验证理财表单（废弃）
-class ValidatePurchaseFinaceForm(FormValidationAction):
-    def name(self) -> Text:
-        return "validate_purchase_finance_form"
-
-    async def validate_finance_product(
-            self,
-            value: Text,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        finance_product = tracker.get_slot("finance_product")
-        if finance_product is not None:
-            # validation succeeded, set the value of the "cuisine" slot to value
-            return {"finance_product": finance_product}
-        else:
-            # if value.find("好") >= 0 or value.find("推荐") >= 0 or value.find("是") >= 0:
-            dispatcher.utter_message(response="utter_wrong_finance_product")
-            # validation failed, set this slot to None, meaning the user will be asked for the slot again
-            return {"finance_product": None}
-
-    async def validate_finance_amount(
-            self,
-            value: Text,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        amount = tracker.get_slot("finance_amount")
-        if amount:
-            # validation succeeded, set the value of the "cuisine" slot to value
-            return {"finance_amount": amount}
-        else:
-            dispatcher.utter_message(response="utter_wrong_finance_product")
-            # validation failed, set this slot to None, meaning the
-            # user will be asked for the slot again
-            return {"finance_amount": None}
-
 
 # 在没有slot的情况下，推荐理财产品
 class ActionRecommandFinancialProducts(Action):
