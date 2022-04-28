@@ -136,7 +136,20 @@ class ActionHandleWhichOne(Action):
             domain: Dict[Text, Any],
     ) -> List[Dict]:
         # todo
-        return [SlotSet('which_one', 1)]
+        latest_message = tracker.latest_message
+        output_list = to_digit(latest_message)
+        which_order = int(output_list[0])
+        if latest_message.find('倒数') >= 0:
+            text = (f"您选中倒数第{which_order}个产品")
+            dispatcher.utter_message(text=text)
+            which_order = -which_order
+        else:
+            text = (f"您选中第{which_order}个产品")
+            dispatcher.utter_message(text=text)
+            which_order = which_order - 1
+        slot_recommand_list = tracker.get_slot("recommand_list")
+        pd = slot_recommand_list[which_order]
+        return [SlotSet('finance_product', '华安安康A')]
 
 
 # 处理用户指定模糊指代产品名
