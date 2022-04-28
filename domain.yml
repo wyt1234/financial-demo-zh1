@@ -163,6 +163,9 @@ slots:
   confirm_purchase:
     type: bool
     influence_conversation: true
+  success_purchase:
+    type: bool
+    influence_conversation: true
 responses:
   utter_out_of_scope:
     - text: 对不起，我不知道该怎么回答。输入“help”以获得帮助。
@@ -310,6 +313,12 @@ responses:
     - text: 请问您想要购买多少金额？
   utter_out_of_finance_scope:
     - text: 有关理财的专业知识小张还在努力学习中噢~
+  utter_fina_if_want_to_other_recommand:
+    - text: 您想看看其他产品吗，也可以喊小张帮您下单购买噢~
+  utter_after_success_purchase:
+    - text: 感谢您支持我们公司的产品，现在想再要看看别的理财产品吗？
+  utter_after_fail_purchase:
+    - text: 您的下单操作没有成功，小张为您重新推荐几款理财产品吧！
 actions:
   - action_session_start
   - action_restart

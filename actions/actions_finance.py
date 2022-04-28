@@ -97,11 +97,9 @@ class ActionRecommandFinancialProducts(Action):
         # if not slot_finance_product:
         text = (f"正在查询最新的理财产品...")
         dispatcher.utter_message(text=text)
-        # text = (f"根据您的喜好，给您推荐以下几款产品：\n"
-        #         f"-鑫增利添添盈A款，预期年化收益率2.5% \n"
-        #         f"-鑫增利添添盈B款，预期年化收益率2.3% \n"
-        #         f"-幸福货币基金C款，预期年化收益率2.7% "
-        #         )
+        pd_name_list = [f"{pd.name} \n" for pd in all_pd]
+        text = (f"给您推荐以下几款产品：\n" + ''.join(pd_name_list))
+        dispatcher.utter_message(text=text)
         text = (f"您可以告诉我您想要询问的产品名称，或者告诉我您想了解第几个产品，么么")
         dispatcher.utter_message(text=text)
         return [SlotSet('recommand_list', all_pd)]
@@ -120,7 +118,7 @@ class ActionAboutRate(Action):
             tracker: Tracker,
             domain: Dict[Text, Any],
     ) -> List[Dict]:
-        text = (f"亲亲已经为您重点增加收益率相关信息，么么")
+        text = (f"亲亲已经为您重点考虑收益率相关信息，么么")
         return [SlotSet('concern_rate', True)]
 
 
@@ -171,14 +169,20 @@ class ActionFinancialProductsDetail(Action):
             tracker: Tracker,
             domain: Dict[Text, Any],
     ) -> List[Dict]:
+        all_pd = profile_db.list_finance_pd()
         finance_product = tracker.get_slot("finance_product")
-        if not finance_product:
+        if finance_product:
             # todo
             text = (f"正在为您详细介绍XXX产品")
+            dispatcher.utter_message(text=text)
+            text = (f"您想看看其他产品吗，或者也可以喊小张帮您下单购买它噢~")
+            dispatcher.utter_message(text=text)
         else:
             # todo
             text = (f"正在为您详细介绍全部产品")
-        dispatcher.utter_message(text=text)
+            dispatcher.utter_message(text=text)
+            text = (f"您可以指定某个产品名称或者告诉我列表的第几个，小张给您重点介绍一下~")
+            dispatcher.utter_message(text=text)
         return []
 
 
@@ -234,20 +238,22 @@ class ActionBuyFinancialProducts(Action):
             domain: Dict[Text, Any],
     ) -> List[Dict]:
         """Executes the action"""
-        slots = {
-        }
-        # finance_product = tracker.get_slot("finance_product")
-        # finance_amount = tracker.get_slot("finance_amount")
-        # confirm_purchase = tracker.get_slot("confirm_purchase")
-        # text = (f"您已成功购买理财产品：{finance_product},购买金额为：{finance_amount}")
-        text = (f"您已成功购买理财产品")
+        finance_product = tracker.get_slot("finance_product")
+        finance_amount = tracker.get_slot("finance_amount")
+        confirm_purchase = tracker.get_slot("confirm_purchase")
+        if not finance_product:
+            text = (f"抱歉还没有选择产品")
+            dispatcher.utter_message(text=text)
+            return [SlotSet('success_purchase', False)]
+        text = (f"您已成功购买理财产品：{finance_product},购买金额为：{finance_amount}")
         dispatcher.utter_message(text=text)
-        # todo 下单后清空所有的slot
-        # slots = {
-        #     "which_one": None,
-        #     "finance_product": None,
-        #     "finance_amount": None,
-        #     "confirm_purchase": None,
-        #     "concern_rate": None,
-        # }
-        return []
+        # 下单后清空所有的slot
+        slots = {
+            "which_one": None,
+            "finance_product": None,
+            "finance_amount": None,
+            "confirm_purchase": None,
+            "concern_rate": None,
+            "success_purchase": True,
+        }
+        return [SlotSet(slot, value) for slot, value in slots.items()]
