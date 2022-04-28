@@ -297,10 +297,6 @@ responses:
         -还清我的信用卡
         -我想转账
         -我想购买理财产品
-  utter_ask_purchase_finance_form_finance_product:
-    - text: 请问您想要购买哪款理财产品？
-  utter_ask_purchase_finance_form_finance_amount:
-    - text: 请问您想要购买多少金额？
   utter_wrong_finance_product:
     - text: 抱歉，您选择的理财产品有误哦
   utter_ask_product_name:
@@ -472,19 +468,4 @@ forms:
             - inform
             - transaction_search_form
           type: from_text
-  purchase_finance_form:
-    required_slots:
-      finance_product:
-        - entity: finance_product
-          type: from_entity
-        - intent:
-            - want_to_buy_finance
-            - inform
-          type: from_text
-      finance_amount:
-        - entity: amount-of-money
-          type: from_entity
-        - intent:
-            - want_to_buy_finance
-            - inform
-          type: from_text
+
