@@ -20,4 +20,17 @@ stories:
   - action: action_show_transfer_charge
   - intent: affirm
   - action: utter_ok
-
+- story: Story from Conversation ID 6f96734bd12749de99caea61b431f131
+  steps:
+  - slot_was_set:
+    - currency: $
+  - intent: want_to_buy_finance
+  - action: recommand_finance_product
+  - intent: want_to_detail
+  - action: action_finance_detail
+  - intent: inform
+    entities:
+    - finance_type: 基金
+  - slot_was_set:
+    - finance_type: 基金
+  - action: action_finance_detail

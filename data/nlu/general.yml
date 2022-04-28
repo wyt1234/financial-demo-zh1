@@ -209,3 +209,4 @@ nlu:
     - [一千七百块](amount-of-money)
     - [1700块](amount-of-money)
     - [5000元](amount-of-money)
+    - 讲一讲[基金](finance_type)产品

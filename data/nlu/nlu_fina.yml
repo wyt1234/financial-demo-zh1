@@ -16,7 +16,8 @@ nlu:
       - 我想购买理财基金
       - 有卖理财产品吗
       - 有卖基金产品吗
-      - 有卖基金产品吗
+      - 我想买理财产品
+      - 我想购买理财
   - intent: want_to_other_recommand
     examples: |
       - 请帮我买一份[基金](finance_type)
@@ -35,12 +36,13 @@ nlu:
       - 还有什么理财产品？
   - intent: finance_detail
     examples: |
+  - intent: want_to_detail
+    examples: |
       - 能不能介绍一下这款理财产品
       - 能仔细说说吗
       - 这款产品的收益率是多少
       - 这款产品的起购金额是多少
-  - intent: want_to_detail
-    examples: |
+      - 讲一讲
       - 能给我详细介绍下吗
       - 介绍一下这款产品
       - 详细情况说一下
@@ -49,6 +51,7 @@ nlu:
       - 讲一讲这款产品
       - 我想了解这款产品的具体情况
       - 具体说说
+      - 详细说说
   - intent: want_to_purchase
     examples: |
       - 好的我想下单
@@ -92,3 +95,7 @@ nlu:
       - 我想买[5万块](amount-of-money)的[鑫利贷](finance_product)
       - 我要买[五千块](amount-of-money)的[天天赢理财](finance_product)
       - 我想买10元的[鑫利](finance_product)理财
+  - intent: out_of_finance_scope
+    examples: |
+      - 有其他基金经理吗
+      - 理财产品和基金有什么区别

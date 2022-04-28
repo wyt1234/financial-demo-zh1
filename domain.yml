@@ -19,8 +19,8 @@ intents:
       use_entities: [ ]
   - check_balance:
       use_entities:
-        - credit_card
         - account_type
+        - credit_card
   - check_earnings:
       use_entities: [ ]
   - check_recipients
@@ -35,7 +35,6 @@ intents:
   - thank
   - faq
   - want_to_buy_finance
-  - finance_detail
   - want_to_detail
   - want_to_other_recommand
   - want_to_purchase
@@ -144,6 +143,12 @@ slots:
     type: any
     influence_conversation: false
   finance_type:
+    type: any
+    influence_conversation: false
+  recommand_list:
+    type: any
+    influence_conversation: false
+  which_one:
     type: any
     influence_conversation: false
   finance_product:
@@ -303,6 +308,8 @@ responses:
     - text: 请问您想要购买哪款理财产品？
   utter_ask_product_amt:
     - text: 请问您想要购买多少金额？
+  utter_out_of_finance_scope:
+    - text: 有关理财的专业知识小张还在努力学习中噢~
 actions:
   - action_session_start
   - action_restart
@@ -328,6 +335,9 @@ actions:
   - buy_financial_products
   - recommand_finance_product
   - action_finance_detail
+  - action_match_product
+  - action_handle_which_one
+  - action_concern_rate
 forms:
   cc_payment_form:
     required_slots:
@@ -468,4 +478,3 @@ forms:
             - inform
             - transaction_search_form
           type: from_text
-

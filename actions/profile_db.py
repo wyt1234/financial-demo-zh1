@@ -46,7 +46,6 @@ CREDIT_CARD_NUMBER_LENGTH = 14
 Base = declarative_base()
 
 
-
 class Finance(Base):
     __tablename__ = "finance"
     id = Column(Integer, primary_key=True)
@@ -55,6 +54,7 @@ class Finance(Base):
     rate = Column(String(255))
     minimum_amount = Column(String(255))
     description = Column(String(255))
+
 
 class Account(Base):
     """Accounts table.
@@ -130,6 +130,10 @@ class ProfileDB:
         Transaction.__table__.create(self.engine, checkfirst=True)
         RecipientRelationship.__table__.create(self.engine, checkfirst=True)
         Account.__table__.create(self.engine, checkfirst=True)
+
+    # 理财产品相关
+    def list_finance_pd(self):
+        return self.session.query(Finance).all()
 
     def get_account(self, id: int):
         """Get an `Account` object based on an `Account.id`"""
