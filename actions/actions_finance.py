@@ -156,6 +156,25 @@ class ActionFillFinancialAmount(Action):
         return []
 
 
+# 核对信息无误
+class ActionCheckBeforeBuyFinancial(Action):
+    """核对信息无误"""
+
+    def name(self) -> Text:
+        return "check_before_buy_financial_products"
+
+    async def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> List[Dict]:
+        """Executes the action"""
+        text = (f"核对信息")
+        dispatcher.utter_message(text=text)
+        return []
+
+
 # 下单
 class ActionBuyFinancialProducts(Action):
     """确认下单"""
