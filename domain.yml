@@ -42,6 +42,7 @@ intents:
   - appoint_which_one
   - ask_rate
   - ask_start_amt
+  - place_an_order
 entities:
   - amount-of-money
   - credit_card
@@ -146,6 +147,9 @@ slots:
     type: any
     influence_conversation: false
   concern_amount:
+    type: any
+    influence_conversation: false
+  finance_type:
     type: any
     influence_conversation: false
 responses:

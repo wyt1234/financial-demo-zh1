@@ -6,32 +6,33 @@ nlu:
       - 我想买一款理财产品
       - 有什么样的理财产品可以购买
       - 推荐一款理财产品
-      - 我想买[5万块](amount-of-money)的[鑫利贷](finance_product)
-      - 我要买[五千块](amount-of-money)的[天天赢理财](finance_product)
       - 帮我买个理财产品吧
       - 给我推荐几款理财产品
       - 有没有理财产品卖
       - 我想买一份理财
-      - 我想买10元的[鑫利](finance_product)理财
       - 我要买理财
       - 买理财
-      - 还有什么理财产品？
       - 我想购买理财产品
+      - 我想购买理财基金
+      - 有卖理财产品吗
+      - 有卖基金产品吗
+      - 有卖基金产品吗
   - intent: want_to_other_recommand
     examples: |
-      - 请帮我买一份[基金](finance_product)
+      - 请帮我买一份[基金](finance_type)
       - 我想看一下股票型[基金](finance_type)
       - 有[股票](finance_type)吗
       - 有[基金](finance_type)吗
+      - 有[保险](finance_type)吗
+      - 有[大额存单](finance_type)吗
+      - 有[柜台债](finance_type)吗
       - 还有其他的吗
       - 我想看看其他的
       - 有其他推荐吗
       - 有其他产品吗
       - 有理财吗
       - 有别的理财产品吗
-      - 有保险吗
-      - 有柜台债吗
-      - 有大额存单吗
+      - 还有什么理财产品？
   - intent: finance_detail
     examples: |
       - 能不能介绍一下这款理财产品
@@ -84,3 +85,11 @@ nlu:
       - 起购金额最低的产品有哪些
       - 有哪些起购金额比较低
       - 起购金额太高了
+  - intent: place_an_order
+    examples: |
+      - 好的下单吧
+      - 好的帮我下单吧谢谢
+      - 我想买[5万块](amount-of-money)的[鑫利贷](finance_product)
+      - 我要买[五千块](amount-of-money)的[天天赢理财](finance_product)
+      - 我想买10元的[鑫利](finance_product)理财
+
