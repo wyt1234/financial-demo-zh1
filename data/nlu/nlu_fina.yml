@@ -92,4 +92,3 @@ nlu:
       - 我想买[5万块](amount-of-money)的[鑫利贷](finance_product)
       - 我要买[五千块](amount-of-money)的[天天赢理财](finance_product)
       - 我想买10元的[鑫利](finance_product)理财
-

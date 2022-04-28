@@ -75,7 +75,6 @@ class ActionRecommandFinancialProducts(Action):
     """购买理财产品"""
 
     def name(self) -> Text:
-        """Unique identifier of the action"""
         return "recommand_finance_product"
 
     async def run(
@@ -99,9 +98,9 @@ class ActionRecommandFinancialProducts(Action):
 
 # 详细介绍理财产品
 class ActionFinancialProductsDetail(Action):
+    """详细介绍理财产品"""
 
     def name(self) -> Text:
-        """Unique identifier of the action"""
         return "action_finance_detail"
 
     async def run(
@@ -119,10 +118,49 @@ class ActionFinancialProductsDetail(Action):
         return []
 
 
+# 输入产品名称
+class ActionFillFinancialName(Action):
+    """输入产品名称"""
+
+    def name(self) -> Text:
+        return "fill_products_name"
+
+    async def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> List[Dict]:
+        """Executes the action"""
+        text = (f"您已输入产品名称")
+        dispatcher.utter_message(text=text)
+        return []
+
+
+# 输入购买的金额
+class ActionFillFinancialAmount(Action):
+    """输入购买的金额"""
+
+    def name(self) -> Text:
+        return "fill_products_amount"
+
+    async def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> List[Dict]:
+        """Executes the action"""
+        text = (f"您已输入购买的金额")
+        dispatcher.utter_message(text=text)
+        return []
+
+
+# 下单
 class ActionBuyFinancialProducts(Action):
     """确认下单"""
+
     def name(self) -> Text:
-        """Unique identifier of the action"""
         return "buy_financial_products"
 
     async def run(

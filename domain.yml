@@ -137,12 +137,6 @@ slots:
   zz_confirm_form:
     type: any
     influence_conversation: false
-  finance_product:
-    type: any
-    influence_conversation: true
-  finance_amount:
-    type: any
-    influence_conversation: true
   concern_rate:
     type: any
     influence_conversation: false
@@ -152,6 +146,18 @@ slots:
   finance_type:
     type: any
     influence_conversation: false
+  finance_product:
+    type: any
+    influence_conversation: true
+  finance_amount:
+    type: any
+    influence_conversation: true
+  finance_purchase_form_ready:
+    type: any
+    influence_conversation: false
+  confirm_purchase:
+    type: any
+    influence_conversation: true
 responses:
   utter_out_of_scope:
     - text: 对不起，我不知道该怎么回答。输入“help”以获得帮助。
@@ -297,6 +303,10 @@ responses:
     - text: 请问您想要购买多少金额？
   utter_wrong_finance_product:
     - text: 抱歉，您选择的理财产品有误哦
+  utter_ask_product_name:
+    - text: 请问您想要购买哪款理财产品？
+  utter_ask_product_amt:
+    - text: 请问您想要购买多少金额？
 actions:
   - action_session_start
   - action_restart
@@ -317,6 +327,8 @@ actions:
   - validate_transfer_money_form
   - validate_transaction_search_form
   - validate_purchase_finance_form
+  - fill_products_name
+  - fill_products_amount
   - buy_financial_products
   - recommand_finance_product
   - action_finance_detail
