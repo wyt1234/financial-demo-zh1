@@ -147,16 +147,16 @@ slots:
     type: any
     influence_conversation: false
   finance_product:
-    type: any
+    type: text
     influence_conversation: true
   finance_amount:
-    type: any
+    type: text
     influence_conversation: true
   finance_purchase_form_ready:
-    type: any
-    influence_conversation: false
+    type: bool
+    influence_conversation: true
   confirm_purchase:
-    type: any
+    type: bool
     influence_conversation: true
 responses:
   utter_out_of_scope:
