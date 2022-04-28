@@ -1,33 +1,86 @@
 version: "2.0"
 nlu:
-- intent: want_to_buy_finance
-  examples: |
-    - 我想买理财
-    - 我想买一款理财产品
-    - 有什么样的理财产品可以购买
-    - 推荐一款理财产品
-    - 我想买[5万块](amount-of-money)的[鑫利贷](finance_product)
-    - 我要买[五千块](amount-of-money)的[天天赢理财](finance_product)
-    - 帮我买个理财产品吧
-    - 给我推荐几款理财产品
-    - 有没有理财产品卖
-    - 我想买一份理财
-    - 我想买10元的[鑫利](finance_product)理财
-    - 我要买理财
-    - 买理财
-    - 还有什么理财产品？
-- intent: want_to_other_recommand
-  examples: |
-    - 请帮我买一份[基金](finance_product)
-    - 我想看一下股票型[基金](finance_type)
-    - 有[股票](finance_type)吗
-    - 有[基金](finance_type)吗
-    - 还有其他的吗
-    - 我想看看其他的
-    - 有其他推荐吗
-    - 有其他产品吗
-    - 有理财吗
-    - 有别的理财产品吗
-    - 有保险吗
-    - 有柜台债吗
-    - 有大额存单吗
+  - intent: want_to_buy_finance
+    examples: |
+      - 我想买理财
+      - 我想买一款理财产品
+      - 有什么样的理财产品可以购买
+      - 推荐一款理财产品
+      - 我想买[5万块](amount-of-money)的[鑫利贷](finance_product)
+      - 我要买[五千块](amount-of-money)的[天天赢理财](finance_product)
+      - 帮我买个理财产品吧
+      - 给我推荐几款理财产品
+      - 有没有理财产品卖
+      - 我想买一份理财
+      - 我想买10元的[鑫利](finance_product)理财
+      - 我要买理财
+      - 买理财
+      - 还有什么理财产品？
+      - 我想购买理财产品
+  - intent: want_to_other_recommand
+    examples: |
+      - 请帮我买一份[基金](finance_product)
+      - 我想看一下股票型[基金](finance_type)
+      - 有[股票](finance_type)吗
+      - 有[基金](finance_type)吗
+      - 还有其他的吗
+      - 我想看看其他的
+      - 有其他推荐吗
+      - 有其他产品吗
+      - 有理财吗
+      - 有别的理财产品吗
+      - 有保险吗
+      - 有柜台债吗
+      - 有大额存单吗
+  - intent: finance_detail
+    examples: |
+      - 能不能介绍一下这款理财产品
+      - 能仔细说说吗
+      - 这款产品的收益率是多少
+      - 这款产品的起购金额是多少
+  - intent: want_to_detail
+    examples: |
+      - 能给我详细介绍下吗
+      - 介绍一下这款产品
+      - 详细情况说一下
+      - 有这款产品的其他介绍吗
+      - 了解一下这款产品
+      - 讲一讲这款产品
+      - 我想了解这款产品的具体情况
+      - 具体说说
+  - intent: want_to_purchase
+    examples: |
+      - 好的我想下单
+      - 就买它了
+      - 行帮我下单吧
+      - 帮我买[1万](amount-of-money)块钱
+      - 这款产品请帮我买[2万](amount-of-money)块钱
+      - 好的下单吧
+      - 可以的直接买吧
+  - intent: appoint_which_one
+    examples: |
+      - 第一个
+      - 第1个
+      - 第二个
+      - 第2个
+      - 列表里第三个
+      - 最后一个
+      - 第3个
+      - 倒数第一个
+      - 倒数第1个
+      - 第四个
+  - intent: ask_rate
+    examples: |
+      - 有收益率比较高的吗
+      - 帮我按照收益率排序
+      - 有哪些收益比较好的
+      - 收益率的怎么样
+      - 这款产品收益率是最高的吗
+      - 有比这款收益率更高的吗
+  - intent: ask_start_amt
+    examples: |
+      - 有起购金额比较低的吗
+      - 起购金额最低的是哪个
+      - 起购金额最低的产品有哪些
+      - 有哪些起购金额比较低
+      - 起购金额太高了

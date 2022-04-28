@@ -38,6 +38,7 @@ from loguru import logger
 import cn2an
 import chinese2digits as c2d
 
+
 def to_digit(s: str):
     output = cn2an.transform("s", "cn2an")
     output = c2d.takeNumberFromString(output)
@@ -91,6 +92,7 @@ class ActionBuyFinancialProducts(Action):
         return []
 
 
+# 验证理财表单（废弃）
 class ValidatePurchaseFinaceForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_purchase_finance_form"
@@ -153,5 +155,27 @@ class ActionRecommandFinancialProducts(Action):
                 f"-鑫增利添添盈B款，预期年化收益率2.3% \n"
                 f"-幸福货币基金C款，预期年化收益率2.7% "
                 )
+        dispatcher.utter_message(text=text)
+        return []
+
+
+# 详细介绍理财产品
+class ActionRecommandFinancialProducts(Action):
+
+    def name(self) -> Text:
+        """Unique identifier of the action"""
+        return "action_finance_detail"
+
+    async def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+    ) -> List[Dict]:
+        finance_product = tracker.get_slot("finance_product")
+        if not finance_product:
+            text = (f"正在为您详细介绍XXX产品")
+        else:
+            text = (f"正在为您详细介绍全部产品")
         dispatcher.utter_message(text=text)
         return []

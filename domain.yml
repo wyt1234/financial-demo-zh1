@@ -3,61 +3,63 @@ session_config:
   session_expiration_time: 0
   carry_over_slots_to_new_session: true
 intents:
-- check_human
-- transfer_money:
-    use_entities: []
-- inform
-- pay_cc:
-    use_entities: []
-- greet
-- goodbye
-- affirm
-- deny
-- thankyou
-- ask_transfer_charge
-- search_transactions:
-    use_entities: []
-- check_balance:
-    use_entities:
-    - account_type
-    - credit_card
-- check_earnings:
-    use_entities: []
-- check_recipients
-- out_of_scope
-- session_start
-- restart
-- trigger_handoff
-- handoff
-- human_handoff
-- help
-- nlu_fallback
-- thank
-- faq
-- want_to_buy_finance
-- finance_detail
-- want_to_detail
-- want_to_other_recommand
-- want_to_purchase
-- appoint_which_one
+  - check_human
+  - transfer_money:
+      use_entities: [ ]
+  - inform
+  - pay_cc:
+      use_entities: [ ]
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - thankyou
+  - ask_transfer_charge
+  - search_transactions:
+      use_entities: [ ]
+  - check_balance:
+      use_entities:
+        - credit_card
+        - account_type
+  - check_earnings:
+      use_entities: [ ]
+  - check_recipients
+  - out_of_scope
+  - session_start
+  - restart
+  - trigger_handoff
+  - handoff
+  - human_handoff
+  - help
+  - nlu_fallback
+  - thank
+  - faq
+  - want_to_buy_finance
+  - finance_detail
+  - want_to_detail
+  - want_to_other_recommand
+  - want_to_purchase
+  - appoint_which_one
+  - ask_rate
+  - ask_start_amt
 entities:
-- amount-of-money
-- credit_card
-- payment_date
-- vendor_name
-- time
-- PERSON
-- number
-- account_type
-- handoff_to
-- search_type
-- artist
-- location
-- song_title
-- product
-- finance_product
-- finance_type
-- finance_amount
+  - amount-of-money
+  - credit_card
+  - payment_date
+  - vendor_name
+  - time
+  - PERSON
+  - number
+  - account_type
+  - handoff_to
+  - search_type
+  - artist
+  - location
+  - song_title
+  - product
+  - finance_product
+  - finance_type
+  - finance_amount
 slots:
   AA_CONTINUE_FORM:
     type: any
@@ -136,330 +138,337 @@ slots:
     influence_conversation: false
   finance_product:
     type: any
-    influence_conversation: false
+    influence_conversation: true
   finance_amount:
+    type: any
+    influence_conversation: true
+  concern_rate:
+    type: any
+    influence_conversation: false
+  concern_amount:
     type: any
     influence_conversation: false
 responses:
   utter_out_of_scope:
-  - text: 对不起，我不知道该怎么回答。输入“help”以获得帮助。
+    - text: 对不起，我不知道该怎么回答。输入“help”以获得帮助。
   utter_ask_transfer_money_form_amount-of-money:
-  - text: 您要转多少钱?
+    - text: 您要转多少钱?
   utter_ask_transfer_money_form_PERSON:
-  - text: 您想把钱转给谁?
+    - text: 您想把钱转给谁?
   utter_goodbye:
-  - text: Bye
+    - text: Bye
   utter_noworries:
-  - text: 不客气:)
+    - text: 不客气:)
   utter_transfer_complete:
-  - text: 成功将{currency}{amount-of-money}转给{PERSON}。
+    - text: 成功将{currency}{amount-of-money}转给{PERSON}。
   utter_transfer_charge:
-  - text: 在收费之前，您有权在一个报表周期内进行6次转账。对于后续的转账，每笔交易将收取{currency}10。
+    - text: 在收费之前，您有权在一个报表周期内进行6次转账。对于后续的转账，每笔交易将收取{currency}10。
   utter_ask_cc_payment_form_amount-of-money:
-  - text: 您想最低还款还是全部还清?
+    - text: 您想最低还款还是全部还清?
   utter_ask_cc_payment_form_credit_card:
-  - text: 您要向哪个信用卡账户付款?
+    - text: 您要向哪个信用卡账户付款?
   utter_ask_cc_payment_form_time:
-  - text: 您想安排哪一天付款?
+    - text: 您想安排哪一天付款?
   utter_ask_transaction_search_form_vendor_name:
-  - text: 您希望查看哪个供应商的事务?星巴克、塔吉特百货、亚马逊
+    - text: 您希望查看哪个供应商的事务?星巴克、塔吉特百货、亚马逊
   utter_ask_transaction_search_form_time:
-  - text: 请问您想查询几号的账单?
+    - text: 请问您想查询几号的账单?
   utter_ask_transaction_search_form_search_type:
-  - buttons:
-    - payload: /inform{"search_type":"deposit"}'
-      title: 转入交易(收益)
-    - payload: /inform{"search_type":"spend"}'
-      title: 转出交易(支出)
-    text: 您要搜索转入交易或转出交易吗?
+    - buttons:
+        - payload: /inform{"search_type":"deposit"}'
+          title: 转入交易(收益)
+        - payload: /inform{"search_type":"spend"}'
+          title: 转出交易(支出)
+      text: 您要搜索转入交易或转出交易吗?
   utter_no_payment_amount:
-  - text: 对不起，这不是一个正确的付款金额。
+    - text: 对不起，这不是一个正确的付款金额。
   utter_no_paymentdate:
-  - text: 对不起，这不是一个有效的付款日期。
+    - text: 对不起，这不是一个有效的付款日期。
   utter_no_creditcard:
-  - text: 对不起，这不是一个可以付款的有效信用卡帐户。
+    - text: 对不起，这不是一个可以付款的有效信用卡帐户。
   utter_no_vendor_name:
-  - text: 对不起，这不是公认的供应商。
+    - text: 对不起，这不是公认的供应商。
   utter_no_transactdate:
-  - text: 抱歉，这不是一个公认的时间范围。
+    - text: 抱歉，这不是一个公认的时间范围。
   utter_cc_pay_scheduled:
-  - text: 支付{currency}{amount-of-money}{payment_amount_type}到您的{credit_card}账户的{time_formatted}。
+    - text: 支付{currency}{amount-of-money}{payment_amount_type}到您的{credit_card}账户的{time_formatted}。
   utter_searching_spend_transactions:
-  - text: 在{start_time_formatted}和{end_time_formatted}之间搜索事务{vendor_name}…
+    - text: 在{start_time_formatted}和{end_time_formatted}之间搜索事务{vendor_name}…
   utter_found_spend_transactions:
-  - text: 我发现{numtransacts} transactions{vendor_name} total {currency}{total}。
+    - text: 我发现{numtransacts} transactions{vendor_name} total {currency}{total}。
   utter_searching_deposit_transactions:
-  - text: 搜索在{start_time_formatted}和{end_time_formatted}之间的存款
+    - text: 搜索在{start_time_formatted}和{end_time_formatted}之间的存款
   utter_found_deposit_transactions:
-  - text: 我发现你账户上的{numtransactions}存款总额为{currency}{total}
+    - text: 我发现你账户上的{numtransactions}存款总额为{currency}{total}
   utter_ask_rephrase:
-  - text: 抱歉我不太明白。你能换种说法吗?
+    - text: 抱歉我不太明白。你能换种说法吗?
   utter_ok:
-  - text: 👍
+    - text: 👍
   utter_ask_continue:
-  - text: 您要继续吗?
+    - text: 您要继续吗?
   utter_default:
-  - text: 抱歉我不太明白。你能换种说法吗?
+    - text: 抱歉我不太明白。你能换种说法吗?
   utter_ask_cc_payment_form_AA_CONTINUE_FORM:
-  - buttons:
-    - payload: /affirm
-      title: 是的
-    - payload: /deny
-      title: 不，取消交易
-    text: 您要继续安排信用卡付款吗?
+    - buttons:
+        - payload: /affirm
+          title: 是的
+        - payload: /deny
+          title: 不，取消交易
+      text: 您要继续安排信用卡付款吗?
   utter_ask_transfer_money_form_AA_CONTINUE_FORM:
-  - buttons:
-    - payload: /affirm
-      title: 是的
-    - payload: /deny
-      title: 不，取消转账
-    text: 您要继续安排汇款吗?
+    - buttons:
+        - payload: /affirm
+          title: 是的
+        - payload: /deny
+          title: 不，取消转账
+      text: 您要继续安排汇款吗?
   utter_ask_transaction_search_form_AA_CONTINUE_FORM:
-  - buttons:
-    - payload: /affirm
-      title: 是的
-    - payload: /deny
-      title: 不，取消搜索
-    text: 您想继续交易搜索吗?
+    - buttons:
+        - payload: /affirm
+          title: 是的
+        - payload: /deny
+          title: 不，取消搜索
+      text: 您想继续交易搜索吗?
   utter_ask_cc_payment_form_zz_confirm_form:
-  - buttons:
-    - payload: /affirm
-      title: 是的
-    - payload: /deny
-      title: 不，取消交易
-    text: 您是否要安排{currency}{amount-of-money}{payment_amount_type}向您的{time_formatting}{credit_card}账户支付{currency}{amount-of-money}{payment_amount_type} ?
+    - buttons:
+        - payload: /affirm
+          title: 是的
+        - payload: /deny
+          title: 不，取消交易
+      text: 您是否要安排{currency}{amount-of-money}{payment_amount_type}向您的{time_formatting}{credit_card}账户支付{currency}{amount-of-money}{payment_amount_type} ?
   utter_ask_transfer_money_form_zz_confirm_form:
-  - buttons:
-    - payload: /affirm
-      title: 是的
-    - payload: /deny
-      title: 不，取消交易
-    text: 您要将 {currency}{amount-of-money} 转给{PERSON}?
+    - buttons:
+        - payload: /affirm
+          title: 是的
+        - payload: /deny
+          title: 不，取消交易
+      text: 您要将 {currency}{amount-of-money} 转给{PERSON}?
   utter_cc_pay_cancelled:
-  - text: 信用卡帐户付款已取消。
+    - text: 信用卡帐户付款已取消。
   utter_transfer_cancelled:
-  - text: 传输取消。
+    - text: 传输取消。
   utter_transaction_search_cancelled:
-  - text: 搜索取消交易。
+    - text: 搜索取消交易。
   utter_account_balance:
-  - text: 你的银行账户余额是 {currency}{init_account_balance}.
+    - text: 你的银行账户余额是 {currency}{init_account_balance}.
   utter_changed_account_balance:
-  - text: 您的银行帐户余额是{currency}{init_account_balance}，现在是{currency}{account_balance}，在转帐和支付之后。
+    - text: 您的银行帐户余额是{currency}{init_account_balance}，现在是{currency}{account_balance}，在转帐和支付之后。
   utter_unknown_recipient:
-  - text: 对不起，{PERSON}不在您的已知收件人列表中。
+    - text: 对不起，{PERSON}不在您的已知收件人列表中。
   utter_insufficient_funds:
-  - text: 对不起，你没有足够的钱去做这件事!
+    - text: 对不起，你没有足够的钱去做这件事!
   utter_insufficient_funds_specific:
-  - text: 您的{credit_card}信用卡上的{payment_amount_type}是{amount-of-money}，所以您没有足够的资金来偿还它。
+    - text: 您的{credit_card}信用卡上的{payment_amount_type}是{amount-of-money}，所以您没有足够的资金来偿还它。
   utter_credit_card_balance:
-  - text: 您的{credit_card}账户的当前余额是{currency}{credit_card_balance}。
+    - text: 您的{credit_card}账户的当前余额是{currency}{credit_card_balance}。
   utter_nothing_due:
-  - text: 你的信用卡 {credit_card} 账单上不欠任何钱。
+    - text: 你的信用卡 {credit_card} 账单上不欠任何钱。
   utter_recipients:
-  - text: 这些是你可以向其汇款的已知收件人:{formatted_recipients}
+    - text: 这些是你可以向其汇款的已知收件人:{formatted_recipients}
   utter_greet:
-  - text: 这就跟你问声好！我是你的财务助理，艾融小张!
+    - text: 这就跟你问声好！我是你的财务助理，艾融小张!
   utter_ask_handoff:
-  - text: 看起来你想被转移到一个人工
+    - text: 看起来你想被转移到一个人工
   utter_handoff:
-  - text: 好的，我帮你转接。
+    - text: 好的，我帮你转接。
   utter_wouldve_handed_off:
-  - text: If you were talking to me via chatroom, I would have handed you off to {handoffhost}.
+    - text: If you were talking to me via chatroom, I would have handed you off to {handoffhost}.
   utter_no_handoff:
-  - text: 因为你还没有配置一个要移交的主机，所以我不能送你去任何地方!
+    - text: 因为你还没有配置一个要移交的主机，所以我不能送你去任何地方!
   utter_ask_whatelse:
-  - text: 还有什么需要我帮忙的吗?
+    - text: 还有什么需要我帮忙的吗?
   utter_bot:
-  - text: 我是你的财务机器人小张
+    - text: 我是你的财务机器人小张
   utter_help:
-  - text: |-
-      我可以帮你处理财务账目。
-      你可以这样问我:
-      -我的账户余额是多少?
-      -还清我的信用卡
-      -我想转账
-      -我想购买理财产品
+    - text: |-
+        我可以帮你处理财务账目。
+        你可以这样问我:
+        -我的账户余额是多少?
+        -还清我的信用卡
+        -我想转账
+        -我想购买理财产品
   utter_ask_purchase_finance_form_finance_product:
-  - text: 请问您想要购买哪款理财产品？
+    - text: 请问您想要购买哪款理财产品？
   utter_ask_purchase_finance_form_finance_amount:
-  - text: 请问您想要购买多少金额？
+    - text: 请问您想要购买多少金额？
   utter_wrong_finance_product:
-  - text: 抱歉，您选择的理财产品有误哦
+    - text: 抱歉，您选择的理财产品有误哦
 actions:
-- action_session_start
-- action_restart
-- action_show_balance
-- action_show_recipients
-- action_show_transfer_charge
-- action_handoff
-- action_handoff_options
-- action_pay_cc
-- action_transfer_money
-- action_transaction_search
-- action_ask_transaction_search_form_zz_confirm_form
-- action_switch_forms_ask
-- action_switch_forms_deny
-- action_switch_forms_affirm
-- action_switch_back_ask
-- validate_cc_payment_form
-- validate_transfer_money_form
-- validate_transaction_search_form
-- validate_purchase_finance_form
-- buy_financial_products
-- recommand_finance_product
+  - action_session_start
+  - action_restart
+  - action_show_balance
+  - action_show_recipients
+  - action_show_transfer_charge
+  - action_handoff
+  - action_handoff_options
+  - action_pay_cc
+  - action_transfer_money
+  - action_transaction_search
+  - action_ask_transaction_search_form_zz_confirm_form
+  - action_switch_forms_ask
+  - action_switch_forms_deny
+  - action_switch_forms_affirm
+  - action_switch_back_ask
+  - validate_cc_payment_form
+  - validate_transfer_money_form
+  - validate_transaction_search_form
+  - validate_purchase_finance_form
+  - buy_financial_products
+  - recommand_finance_product
+  - action_finance_detail
 forms:
   cc_payment_form:
     required_slots:
       AA_CONTINUE_FORM:
-      - intent: affirm
-        type: from_intent
-        value: yes
-      - intent: deny
-        type: from_intent
-        value: no
-      - intent:
-        - inform
-        - cc_payment_form
-        type: from_text
+        - intent: affirm
+          type: from_intent
+          value: yes
+        - intent: deny
+          type: from_intent
+          value: no
+        - intent:
+            - inform
+            - cc_payment_form
+          type: from_text
       credit_card:
-      - entity: credit_card
-        type: from_entity
-      - intent:
-        - inform
-        - cc_payment_form
-        type: from_text
+        - entity: credit_card
+          type: from_entity
+        - intent:
+            - inform
+            - cc_payment_form
+          type: from_text
       amount-of-money:
-      - entity: amount-of-money
-        not_intent:
-        - check_balance
-        - check_earnings
-        type: from_entity
-      - entity: number
-        not_intent:
-        - check_balance
-        - check_earnings
-        type: from_entity
-      - intent:
-        - inform
-        - cc_payment_form
-        type: from_text
+        - entity: amount-of-money
+          not_intent:
+            - check_balance
+            - check_earnings
+          type: from_entity
+        - entity: number
+          not_intent:
+            - check_balance
+            - check_earnings
+          type: from_entity
+        - intent:
+            - inform
+            - cc_payment_form
+          type: from_text
       time:
-      - entity: time
-        type: from_entity
-      - intent:
-        - inform
-        - cc_payment_form
-        type: from_text
+        - entity: time
+          type: from_entity
+        - intent:
+            - inform
+            - cc_payment_form
+          type: from_text
       zz_confirm_form:
-      - intent: affirm
-        type: from_intent
-        value: yes
-      - intent: deny
-        type: from_intent
-        value: no
-      - intent:
-        - inform
-        - cc_payment_form
-        type: from_text
+        - intent: affirm
+          type: from_intent
+          value: yes
+        - intent: deny
+          type: from_intent
+          value: no
+        - intent:
+            - inform
+            - cc_payment_form
+          type: from_text
   transfer_money_form:
     required_slots:
       AA_CONTINUE_FORM:
-      - intent: affirm
-        type: from_intent
-        value: yes
-      - intent: deny
-        type: from_intent
-        value: no
-      - intent:
-        - inform
-        - transfer_money_form
-        type: from_text
+        - intent: affirm
+          type: from_intent
+          value: yes
+        - intent: deny
+          type: from_intent
+          value: no
+        - intent:
+            - inform
+            - transfer_money_form
+          type: from_text
       PERSON:
-      - entity: PERSON
-        type: from_entity
-      - intent:
-        - inform
-        - transfer_money_form
-        type: from_text
+        - entity: PERSON
+          type: from_entity
+        - intent:
+            - inform
+            - transfer_money_form
+          type: from_text
       amount-of-money:
-      - entity: amount-of-money
-        not_intent:
-        - check_balance
-        - check_earnings
-        type: from_entity
-      - entity: number
-        not_intent:
-        - check_balance
-        - check_earnings
-        type: from_entity
-      - intent:
-        - inform
-        - transfer_money_form
-        type: from_text
+        - entity: amount-of-money
+          not_intent:
+            - check_balance
+            - check_earnings
+          type: from_entity
+        - entity: number
+          not_intent:
+            - check_balance
+            - check_earnings
+          type: from_entity
+        - intent:
+            - inform
+            - transfer_money_form
+          type: from_text
       zz_confirm_form:
-      - intent: affirm
-        type: from_intent
-        value: yes
-      - intent: deny
-        type: from_intent
-        value: no
-      - intent:
-        - inform
-        - transfer_money_form
-        type: from_text
+        - intent: affirm
+          type: from_intent
+          value: yes
+        - intent: deny
+          type: from_intent
+          value: no
+        - intent:
+            - inform
+            - transfer_money_form
+          type: from_text
   transaction_search_form:
     required_slots:
       AA_CONTINUE_FORM:
-      - intent: affirm
-        type: from_intent
-        value: yes
-      - intent: deny
-        type: from_intent
-        value: no
-      - intent:
-        - inform
-        - transaction_search_form
-        type: from_text
+        - intent: affirm
+          type: from_intent
+          value: yes
+        - intent: deny
+          type: from_intent
+          value: no
+        - intent:
+            - inform
+            - transaction_search_form
+          type: from_text
       search_type:
-      - intent: search_transactions
-        type: from_trigger_intent
-        value: spend
-      - intent: check_earnings
-        type: from_trigger_intent
-        value: deposit
-      - type: from_entity
-        entity: search_type
+        - intent: search_transactions
+          type: from_trigger_intent
+          value: spend
+        - intent: check_earnings
+          type: from_trigger_intent
+          value: deposit
+        - type: from_entity
+          entity: search_type
       time:
-      - entity: time
-        type: from_entity
-      - intent:
-        - inform
-        - transaction_search_form
-        type: from_text
+        - entity: time
+          type: from_entity
+        - intent:
+            - inform
+            - transaction_search_form
+          type: from_text
       zz_confirm_form:
-      - intent: affirm
-        type: from_intent
-        value: yes
-      - intent: deny
-        type: from_intent
-        value: no
-      - intent:
-        - inform
-        - transaction_search_form
-        type: from_text
+        - intent: affirm
+          type: from_intent
+          value: yes
+        - intent: deny
+          type: from_intent
+          value: no
+        - intent:
+            - inform
+            - transaction_search_form
+          type: from_text
   purchase_finance_form:
     required_slots:
       finance_product:
-      - entity: finance_product
-        type: from_entity
-      - intent:
-        - want_to_buy_finance
-        - inform
-        type: from_text
+        - entity: finance_product
+          type: from_entity
+        - intent:
+            - want_to_buy_finance
+            - inform
+          type: from_text
       finance_amount:
-      - entity: amount-of-money
-        type: from_entity
-      - intent:
-        - want_to_buy_finance
-        - inform
-        type: from_text
+        - entity: amount-of-money
+          type: from_entity
+        - intent:
+            - want_to_buy_finance
+            - inform
+          type: from_text
