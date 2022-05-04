@@ -34,3 +34,18 @@ stories:
   - slot_was_set:
     - finance_type: 基金
   - action: action_finance_detail
+- story: Story from Conversation ID cfcc90f6dbbb4cb9acc9db4d160a55e9
+  steps:
+  - slot_was_set:
+    - currency: $
+  - intent: want_to_buy_finance
+  - action: recommand_finance_product
+  - slot_was_set:
+    - recommand_list: '[{"description": "基金经理为陆奔、石雨欣，通过对权益类资产和固定收益资产的灵活配置充分捕捉各类证券子市场的绝对收益机会。", "minimum_amount": "300.0", "type": "基金", "id": 4, "rate": "1.69", "name": "华安安康A"}, {"description": "发行期为2022年4月1日至2022年4月30日", "minimum_amount": "200000.0", "type": "大额存单", "id": 3, "rate": "2.1", "name": "2022年二十六期个人大额存单"}, {"description": "意外保障，缴费灵活", "minimum_amount": "5000.0", "type": "保险", "id": 7, "rate": null, "name": "利安永吉终身寿险"}, {"description": "续发行，票面利率2.59", "minimum_amount": "100.0", "type": "柜台债", "id": 6, "rate": "2.43", "name": "国家开发银行2022年第二期金融债券"}, {"description": "申赎灵活、流动性高、投资策略稳健", "minimum_amount": "10000.0", "type": "理财", "id": 5, "rate": "2.83", "name": "日鑫系列天天盈B款"}]'
+  - intent: inform
+    entities:
+    - product: 华安安康A
+  - action: action_match_product
+  - slot_was_set:
+    - finance_product: 华安安康A
+  - action: action_finance_detail

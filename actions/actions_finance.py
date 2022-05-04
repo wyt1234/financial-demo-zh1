@@ -1,4 +1,5 @@
 import os
+import random
 from typing import Dict, Text, Any, List
 import logging
 from dateutil import parser
@@ -93,15 +94,17 @@ class ActionRecommandFinancialProducts(Action):
             domain: Dict[Text, Any],
     ) -> List[Dict]:
         all_pd = profile_db.list_finance_pd()
+        random.shuffle(all_pd)
         # slot_finance_product = tracker.get_slot("finance_product")
         # if not slot_finance_product:
         text = (f"正在查询最新的理财产品...")
         dispatcher.utter_message(text=text)
-        pd_name_list = [f"{pd.name} \n" for pd in all_pd]
+        pd_name_list = [f"{i+1}、 {pd.name} \n" for i,pd in enumerate(all_pd)]
         text = (f"给您推荐以下几款产品：\n" + ''.join(pd_name_list))
         dispatcher.utter_message(text=text)
-        text = (f"您可以告诉我您想要询问的产品名称，或者告诉我您想了解第几个产品，么么")
+        text = (f"可以告诉小张您想要询问的产品名称，或者想了解第几个产品")
         dispatcher.utter_message(text=text)
+        all_pd = profile_db.to_json_all(all_pd)
         return [SlotSet('recommand_list', all_pd)]
 
 

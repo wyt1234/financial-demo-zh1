@@ -335,7 +335,7 @@ A CI/CD pipeline is used to test, build and deploy the financial-demo bot to AWS
 
 The pipeline uses GitHub Actions, defined in  `.github/workflows/cicd.yml`. It includes these jobs:
 
-![](images/cicd.png)
+![](asr/images/cicd.png)
 
 **[params](https://github.com/RasaHQ/financial-demo/blob/d40467b4fb2a7d4fb072b86a2828a8cec662eb63/.github/workflows/cicd.yml#L26)**
 
@@ -1034,7 +1034,7 @@ The cluster context is also added to the `~/.kube/config` file.
 
 The VPC created looks something like this:
 
-![](images/financial-demo-eks-test-vpc.png)
+![](asr/images/financial-demo-eks-test-vpc.png)
 
 The EKS Control Plane interacts with the the EKS Data Plane (the nodes), like this:
 

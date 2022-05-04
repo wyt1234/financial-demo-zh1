@@ -10,6 +10,7 @@ from random import choice, randrange, sample, randint
 from numpy import arange
 from datetime import datetime, timedelta
 import pytz
+import json
 
 utc = pytz.UTC
 
@@ -522,3 +523,27 @@ class ProfileDB:
         )
         self.session.add(transaction)
         self.session.commit()
+
+    # '''把sqlalchemy对象转化成json数据类型'''
+    @staticmethod
+    def to_json_all(msg: list):
+        data = []
+        if type(msg) == list:
+            for i in range(len(msg)):
+                temp_dict = {}
+                j = 0
+                for k, v in msg[i].__dict__.items():
+                    if j > 0:
+                        temp_dict[k] = v
+                    j += 1
+
+                data.append(temp_dict)
+        else:
+            temp_dict = {}
+            j = 0
+            for k, v in msg.__dict__.items():
+                if j > 0:
+                    temp_dict[k] = v
+                j += 1
+            data.append(temp_dict)
+        return json.dumps(data, ensure_ascii=False)
