@@ -342,6 +342,7 @@ actions:
 - validate_purchase_finance_form
 - fill_products_name
 - fill_products_amount
+- check_before_buy_financial_products
 - buy_financial_products
 - recommand_finance_product
 - action_finance_detail

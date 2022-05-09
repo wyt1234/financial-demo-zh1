@@ -18,6 +18,7 @@ nlu:
     - 有卖基金产品吗
     - 我想买理财产品
     - 我想购买理财
+    - 你好我想看一看理财产品
 - intent: want_to_other_recommand
   examples: |
     - 请帮我买一份[基金](finance_type)
@@ -59,6 +60,7 @@ nlu:
     - 这款产品请帮我买[2万](amount-of-money)块钱
     - 好的下单吧
     - 可以的直接买吧
+    - 下单
 - intent: appoint_which_one
   examples: |
     - 第一个

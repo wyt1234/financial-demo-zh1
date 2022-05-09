@@ -16,6 +16,7 @@ from socketio import AsyncServer
 import base64
 
 from asr.asrt_client_http import asr
+from tts.tts_client import tts
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,7 @@ class SocketIOOutput(OutputChannel):
     ) -> None:
         """Send a message through this channel."""
 
+        tts(''.join(text.strip().split("\n\n")))  # fixme TTS
         for message_part in text.strip().split("\n\n"):
             await self._send_message(recipient_id, {"text": message_part})
 
@@ -246,7 +248,7 @@ class SocketIOInput(InputChannel):
             else:
                 sender_id = sid
 
-            # fixme ASR
+            # ASR
             data['message'] = asr(b64wave=data['message'].split(",")[1])
             message = UserMessage(
                 data["message"], output_channel, sender_id, input_channel=self.name()

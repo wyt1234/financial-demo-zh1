@@ -1,2 +1,11 @@
 我想买理财产品
+第一个 action_handle_which_one
 华安安康A
+action_finance_detail
+下单
+utter_ask_product_amt
+5万
+fill_products_amount
+check_before_buy_financial_products
+是的
+buy_financial_products

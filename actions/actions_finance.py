@@ -50,7 +50,7 @@ profile_db = ProfileDB(ENGINE)
 
 
 def to_digit(s: str):
-    output = cn2an.transform("s", "cn2an")
+    output = cn2an.transform(s, "cn2an")
     output = c2d.takeNumberFromString(output)
     output = output['digitsStringList']
     return output
@@ -139,7 +139,7 @@ class ActionHandleWhichOne(Action):
             domain: Dict[Text, Any],
     ) -> List[Dict]:
         # todo
-        latest_message = tracker.latest_message
+        latest_message = tracker.latest_message['text']
         output_list = to_digit(latest_message)
         which_order = int(output_list[0])
         if latest_message.find('倒数') >= 0:

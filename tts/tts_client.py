@@ -20,3 +20,4 @@ def tts(message):
 
 if __name__ == '__main__':
     tts('你好呀，我是艾融小张！')
+    # tts('我想购买理财产品')
