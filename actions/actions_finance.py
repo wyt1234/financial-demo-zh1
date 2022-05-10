@@ -1,3 +1,4 @@
+import json
 import os
 import random
 from typing import Dict, Text, Any, List
@@ -63,7 +64,7 @@ time2 = datetime.datetime.now()
 logger.info(f'spacy model加载完成，耗时{time2 - time1}秒')
 
 
-def sentences_similarity(sentences, corpus, topk=3, min_simil=0):
+def sentences_similarity(sentences, corpus, topk=3, min_simil=0) -> List:
     similarities = []
     for n, s in enumerate(sentences):
         for q in corpus:
@@ -99,7 +100,7 @@ class ActionRecommandFinancialProducts(Action):
         # if not slot_finance_product:
         text = (f"正在查询最新的理财产品...")
         dispatcher.utter_message(text=text)
-        pd_name_list = [f"{i+1}、 {pd.name} \n" for i,pd in enumerate(all_pd)]
+        pd_name_list = [f"{i + 1}、 {pd.name} \n" for i, pd in enumerate(all_pd)]
         text = (f"给您推荐以下几款产品：\n" + ''.join(pd_name_list))
         dispatcher.utter_message(text=text)
         text = (f"可以告诉小张您想要询问的产品名称，或者想了解第几个产品")
@@ -122,6 +123,7 @@ class ActionAboutRate(Action):
             domain: Dict[Text, Any],
     ) -> List[Dict]:
         text = (f"亲亲已经为您重点考虑收益率相关信息，么么")
+        dispatcher.utter_message(text)
         return [SlotSet('concern_rate', True)]
 
 
@@ -138,21 +140,23 @@ class ActionHandleWhichOne(Action):
             tracker: Tracker,
             domain: Dict[Text, Any],
     ) -> List[Dict]:
-        # todo
         latest_message = tracker.latest_message['text']
         output_list = to_digit(latest_message)
         which_order = int(output_list[0])
         if latest_message.find('倒数') >= 0:
-            text = (f"您选中倒数第{which_order}个产品")
+            text = (f"您选中倒数第{which_order}个产品:")
             dispatcher.utter_message(text=text)
             which_order = -which_order
         else:
-            text = (f"您选中第{which_order}个产品")
+            text = (f"您选中第{which_order}个产品:")
             dispatcher.utter_message(text=text)
             which_order = which_order - 1
         slot_recommand_list = tracker.get_slot("recommand_list")
-        pd = slot_recommand_list[which_order]
-        return [SlotSet('finance_product', '华安安康A')]
+        pd = json.loads(slot_recommand_list)[which_order]
+        #
+        text = (f"{pd['name']}")
+        dispatcher.utter_message(text=text)
+        return [SlotSet('finance_product', pd['name'])]
 
 
 # 处理用户指定模糊指代产品名
@@ -168,8 +172,12 @@ class ActionMatchProduct(Action):
             tracker: Tracker,
             domain: Dict[Text, Any],
     ) -> List[Dict]:
-        # todo
-        return [SlotSet('finance_product', '华安安康A')]
+        latest_message = tracker.latest_message['text']
+        all_pd = profile_db.list_finance_pd()
+        most_likely_pd = sentences_similarity(latest_message, [pd.name for pd in all_pd])[0]['q']
+        text = f"您指的是{most_likely_pd}"
+        dispatcher.utter_message(text)
+        return [SlotSet('finance_product', most_likely_pd)]
 
 
 # 详细介绍理财产品
@@ -188,15 +196,17 @@ class ActionFinancialProductsDetail(Action):
         all_pd = profile_db.list_finance_pd()
         finance_product = tracker.get_slot("finance_product")
         if finance_product:
-            # todo
-            text = (f"正在为您详细介绍XXX产品")
+            text = (f"小张给您仔细介绍下：")
+            dispatcher.utter_message(text=text)
+            choose_pd = [x for x in all_pd if x.name == finance_product][0]
+            text = (f"{choose_pd.name},利率为{choose_pd.rate}%，{choose_pd.description}")
             dispatcher.utter_message(text=text)
             text = (f"您想看看其他产品吗，或者也可以喊小张帮您下单购买它噢~")
             dispatcher.utter_message(text=text)
         else:
             # todo
-            text = (f"正在为您详细介绍全部产品")
-            dispatcher.utter_message(text=text)
+            # text = (f"正在为您详细介绍全部产品")
+            # dispatcher.utter_message(text=text)
             text = (f"您可以指定某个产品名称或者告诉我列表的第几个，小张给您重点介绍一下~")
             dispatcher.utter_message(text=text)
         return []
@@ -216,9 +226,11 @@ class ActionFillFinancialAmount(Action):
             domain: Dict[Text, Any],
     ) -> List[Dict]:
         """Executes the action"""
-        text = (f"您已输入购买的金额")
+        latest_message = tracker.latest_message['text']
+        number = to_digit(latest_message)[0]
+        text = (f"您输入购买的金额为{number}元")
         dispatcher.utter_message(text=text)
-        return [SlotSet('finance_amount', '1000')]
+        return [SlotSet('finance_amount', number)]
 
 
 # 核对信息无误
@@ -235,9 +247,16 @@ class ActionCheckBeforeBuyFinancial(Action):
             domain: Dict[Text, Any],
     ) -> List[Dict]:
         """Executes the action"""
-        text = (f"核对信息")
-        dispatcher.utter_message(text=text)
-        return [SlotSet('confirm_purchase', True)]
+        latest_message = tracker.latest_message['text']
+        most_likely_choose = sentences_similarity(latest_message, ['正确', '不对'])[0]['q']
+        if most_likely_choose == '正确':
+            text = (f"好的，核对信息无误，正在为您下单")
+            dispatcher.utter_message(text=text)
+            return [SlotSet('confirm_purchase', True)]
+        else:
+            text = (f"好的，正在为您取消，您可以重新选择，谢谢")
+            dispatcher.utter_message(text=text)
+            return [SlotSet('confirm_purchase', False)]
 
 
 # 下单

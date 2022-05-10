@@ -19,8 +19,8 @@ intents:
     use_entities: []
 - check_balance:
     use_entities:
-    - credit_card
     - account_type
+    - credit_card
 - check_earnings:
     use_entities: []
 - check_recipients

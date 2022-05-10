@@ -1,6 +1,6 @@
 我想买理财产品
 第一个 action_handle_which_one
-华安安康A
+华安安康A   action_match_product
 action_finance_detail
 下单
 utter_ask_product_amt
