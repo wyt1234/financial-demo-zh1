@@ -106,11 +106,11 @@ class Ws_Param(object):
 '''
 
 '''
-global wsParam
+# global wsParam
 wsParam = Ws_Param(APPID='c071bb67', APISecret='ZTJiYTA2NDM2YTljNGRjNDlkM2Q2ODE5',
                    APIKey='31f24674406ee2f99d5a48e26ebe5a93',
                    AudioFile=r'../temp_file/BAC009S0764W0121.wav')
-global buf
+# global buf
 global asr_result
 
 
@@ -130,7 +130,6 @@ def on_message(ws, message):
             for i in data:
                 for w in i["cw"]:
                     result += w["w"]
-            global asr_result
             asr_result = result
             print("sid:%s call success!,data is:%s" % (sid, json.dumps(data, ensure_ascii=False)))
     except Exception as e:
@@ -153,8 +152,6 @@ def on_open(ws):
         frameSize = 8000  # 每一帧的音频大小
         intervel = 0.04  # 发送音频间隔(单位:s)
         status = STATUS_FIRST_FRAME  # 音频的状态信息，标识音频是第一帧，还是中间帧、最后一帧
-
-        # with open(wsParam.AudioFile, "rb") as fp:
         while True:
             # buf = fp.read(frameSize)
             # 文件结束
@@ -170,28 +167,16 @@ def on_open(ws):
                      "data": {"status": 0, "format": "audio/L16;rate=16000", "audio": buf, "encoding": "raw"}}
                 d = json.dumps(d)
                 ws.send(d)
-                status = STATUS_CONTINUE_FRAME
-            # 中间帧处理
-            elif status == STATUS_CONTINUE_FRAME:
-                # fixme str(base64.b64encode(buf), 'utf-8')
-                d = {"data": {"status": 1, "format": "audio/L16;rate=16000", "audio": buf, "encoding": "raw"}}
-                ws.send(json.dumps(d))
-            # 最后一帧处理
-            elif status == STATUS_LAST_FRAME:
-                # fixme str(base64.b64encode(buf), 'utf-8')
-                d = {"data": {"status": 2, "format": "audio/L16;rate=16000", "audio": buf, "encoding": "raw"}}
-                ws.send(json.dumps(d))
-                time.sleep(1)
                 break
             # 模拟音频采样间隔
             time.sleep(intervel)
         ws.close()
-
     thread.start_new_thread(run, ())
 
 
 def asr(audio_str: str):
     global buf
+    # global asr_result
     buf = audio_str
     time1 = datetime.now()
     websocket.enableTrace(False)
@@ -201,7 +186,7 @@ def asr(audio_str: str):
     ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
     time2 = datetime.now()
     print(time2 - time1)
-    print(asr_result)
+    # print(asr_result)
 
 
 if __name__ == "__main__":
