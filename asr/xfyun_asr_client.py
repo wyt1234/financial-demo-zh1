@@ -116,7 +116,7 @@ global asr_result
 
 # 收到websocket消息的处理
 def on_message(ws, message):
-    result = ""
+    # result = ""
     try:
         code = json.loads(message)["code"]
         sid = json.loads(message)["sid"]
@@ -129,9 +129,9 @@ def on_message(ws, message):
             # print(json.loads(message))
             for i in data:
                 for w in i["cw"]:
-                    result += w["w"]
-            global asr_result
-            asr_result = result
+                    globals()['asr_result'] += w["w"]
+            # global asr_result
+            # asr_result = result
             print("sid:%s call success!,data is:%s" % (sid, json.dumps(data, ensure_ascii=False)))
     except Exception as e:
         print("receive msg,but parse exception:", e)
@@ -158,7 +158,7 @@ def on_open(ws):
         while True:
             # buf = fp.read(frameSize)
             # 文件结束
-            if not buf:
+            if not globals()['buf']:
                 status = STATUS_LAST_FRAME
             # 第一帧处理
             # 发送第一帧音频，带business 参数
@@ -171,11 +171,14 @@ def on_open(ws):
                 d = json.dumps(d)
                 ws.send(d)
                 status = STATUS_CONTINUE_FRAME
+                globals()['buf'] = None
             # 中间帧处理
             elif status == STATUS_CONTINUE_FRAME:
                 # fixme str(base64.b64encode(buf), 'utf-8')
                 d = {"data": {"status": 1, "format": "audio/L16;rate=16000", "audio": buf, "encoding": "raw"}}
                 ws.send(json.dumps(d))
+                globals()['buf'] = None
+                # break
             # 最后一帧处理
             elif status == STATUS_LAST_FRAME:
                 # fixme str(base64.b64encode(buf), 'utf-8')
@@ -192,7 +195,9 @@ def on_open(ws):
 
 def asr(audio_str: str):
     global buf
+    global asr_result
     buf = audio_str
+    asr_result = ''
     time1 = datetime.now()
     websocket.enableTrace(False)
     wsUrl = wsParam.create_url()
