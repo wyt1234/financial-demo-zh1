@@ -193,7 +193,11 @@ def on_open(ws):
     thread.start_new_thread(run, ())
 
 
-def asr(audio_str: str):
+# '''对外接口'''
+def asr(audio_str: str, b64wave_symbol=False):
+    # b64wave_symbol:个性化配置，是否传过来的是一个b64wave字符串
+    if b64wave_symbol:
+        audio_str = str(base64.b64encode(base64.b64decode(audio_str)), encoding='utf-8')
     global buf
     global asr_result
     buf = audio_str
