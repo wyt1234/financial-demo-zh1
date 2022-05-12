@@ -21,6 +21,8 @@
 #  可添加语种或方言，添加后会显示该方言的参数值
 #  错误码链接：https://www.xfyun.cn/document/error-code （code返回错误码时必看）
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+import wave
+
 import websocket
 import datetime
 import hashlib
@@ -38,6 +40,20 @@ import _thread as thread
 STATUS_FIRST_FRAME = 0  # 第一帧的标识
 STATUS_CONTINUE_FRAME = 1  # 中间帧标识
 STATUS_LAST_FRAME = 2  # 最后一帧的标识
+
+
+def read_wav_bytes(filename: str) -> tuple:
+    '''
+    读取一个wav文件，返回声音信号的时域谱矩阵和播放时间
+    '''
+    wav = wave.open(filename, "rb")  # 打开一个wav格式的声音文件流
+    num_frame = wav.getnframes()  # 获取帧数
+    num_channel = wav.getnchannels()  # 获取声道数
+    framerate = wav.getframerate()  # 获取帧速率
+    num_sample_width = wav.getsampwidth()  # 获取实例的比特宽度，即每一帧的字节数
+    str_data = wav.readframes(num_frame)  # 读取全部的帧
+    wav.close()  # 关闭流
+    return str_data, framerate, num_channel, num_sample_width
 
 
 class Ws_Param(object):
@@ -148,7 +164,6 @@ def on_open(ws):
             # 发送第一帧音频，带business 参数
             # appid 必须带上，只需第一帧发送
             if status == STATUS_FIRST_FRAME:
-
                 d = {"common": wsParam.CommonArgs,
                      "business": wsParam.BusinessArgs,
                      # fixme str(base64.b64encode(buf), 'utf-8')
@@ -191,12 +206,7 @@ def asr(audio_str: str):
 
 if __name__ == "__main__":
     # 测试时候在此处正确填写相关信息即可运行
-    wsParam = Ws_Param(APPID='c071bb67', APISecret='ZTJiYTA2NDM2YTljNGRjNDlkM2Q2ODE5',
-                       APIKey='31f24674406ee2f99d5a48e26ebe5a93',
-                       AudioFile=r'../temp_file/BAC009S0764W0121.wav')
-    websocket.enableTrace(False)
-    wsUrl = wsParam.create_url()
-    ws = websocket.WebSocketApp(wsUrl, on_message=on_message, on_error=on_error, on_close=on_close)
-    ws.on_open = on_open
-    ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
-    pass
+    file_path = "../temp_file/BAC009S0764W0121.wav"
+    wav_bytes, sample_rate, channels, sample_width = read_wav_bytes(file_path)
+    wav_bytes = str(base64.b64encode(wav_bytes), 'utf-8')
+    asr(wav_bytes)
