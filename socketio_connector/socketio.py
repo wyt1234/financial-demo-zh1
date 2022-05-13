@@ -15,7 +15,8 @@ from sanic.response import HTTPResponse
 from socketio import AsyncServer
 import base64
 
-from asr.asrt_client_http import asr
+# from asr.asrt_client_http import asr  #
+from asr.xfyun_asr_client import asr  # 讯飞asr
 from tts.tts_client import tts
 
 logger = logging.getLogger(__name__)
@@ -248,8 +249,9 @@ class SocketIOInput(InputChannel):
             else:
                 sender_id = sid
 
-            # ASR
-            data['message'] = asr(b64wave=data['message'].split(",")[1])
+            # data['message'] = asr(b64wave=data['message'].split(",")[1]) # 本地ASR
+            data['message'] = asr(data['message'].split(",")[1], b64wave_symbol=True)  # 讯飞ASR
+
             message = UserMessage(
                 data["message"], output_channel, sender_id, input_channel=self.name()
             )

@@ -211,6 +211,7 @@ def asr(audio_str: str, b64wave_symbol=False):
     time2 = datetime.now()
     print(time2 - time1)
     print(asr_result)
+    return asr_result
 
 
 if __name__ == "__main__":
